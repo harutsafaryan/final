@@ -17,6 +17,7 @@ model User {
   password Password?
   notes    Note[]
   checks   Check[]
+  todos    ToDo[]
 }
 
 model Password {
@@ -38,18 +39,21 @@ model Note {
   userId Int
 }
 
-model ToDo {
-  id Int @id @default(autoincrement())
+model Check {
+  id      Int     @id @default(autoincrement())
   comment String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  check   Check @relation(fields: [checkId], references: [id])
-  checkId Int
+  todo   ToDo @relation(fields: [todoId], references: [id])
+  todoId Int
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }
 
-model Check {
+model ToDo {
   id Int @id @default(autoincrement())
 
   description String
@@ -58,7 +62,7 @@ model Check {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  todos ToDo[]
+  checks Check[]
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
