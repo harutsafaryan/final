@@ -1,4 +1,4 @@
-import type { User, ToDo } from "@prisma/client";
+import type { User, Todo } from "@prisma/client";
 import { prisma } from "~/db.server";
 
 export async function getTodos() {
