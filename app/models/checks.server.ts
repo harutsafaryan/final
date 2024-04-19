@@ -10,7 +10,12 @@ export async function deleteCheck(id: Check['id']) {
 }
 
 export async function getCheckById(id: Check['id']) {
-    return await prisma.check.findFirst({ where: { id } })
+    return await prisma.check.findFirst({
+        where: { id },
+        include: {
+            todo: true
+        }
+    })
 }
 
 export async function createCheck({ comment, todoId, userId }: Pick<Check, 'comment' | 'todoId' | 'userId'>) {
@@ -25,10 +30,9 @@ export async function generateChecks() {
     const random = Math.random() * 10000;
     const text = random.toString();
     await prisma.check.create({
-        data : {
-            comment: text,
-            todoId : 1,
-            userId : 1
+        data: {
+            todoId: 1,
+            userId: 1
         }
     })
 }
