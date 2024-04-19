@@ -1,9 +1,16 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+import { createCheck } from "~/models/checks.server";
 
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Remix Notes" }];
+
+// export async function loader() {
+//   await createCheck({comment:'test', todoId: 1, userId: 1})
+//   console.log('action');
+//   return null;
+// }
 
 export default function Index() {
   const user = useOptionalUser();

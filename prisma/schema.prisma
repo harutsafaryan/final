@@ -56,11 +56,18 @@ model Check {
 model Todo {
   id Int @id @default(autoincrement())
 
-  description String
-  interval    Interval @default(DAILY)
+  reference  String   @unique
+  title      String
+  definition String
+  method     Interval @default(DAILY)
+  location   String
+  criteria   String
+  record     String
+  comments   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  active    Boolean  @default(true)
 
   checks Check[]
 
@@ -68,7 +75,7 @@ model Todo {
   userId Int
 }
 
-enum Interval { 
+enum Interval {
   DAILY
   WEEKLY
   MONTLY

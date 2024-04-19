@@ -15,7 +15,20 @@ export async function getCheckById(id: Check['id']) {
 
 export async function createCheck({ comment, todoId, userId }: Pick<Check, 'comment' | 'todoId' | 'userId'>) {
     return await prisma.check.create({
-        data: {comment, todoId, userId
+        data: {
+            comment, todoId, userId
+        }
+    })
+}
+
+export async function generateChecks() {
+    const random = Math.random() * 10000;
+    const text = random.toString();
+    await prisma.check.create({
+        data : {
+            comment: text,
+            todoId : 1,
+            userId : 1
         }
     })
 }

@@ -8,23 +8,54 @@ export async function action({ request }: ActionFunctionArgs) {
     const userId = await requireUserId(request);
 
     const formData = await request.formData();
-    const description = formData.get('description');
-    const interval = formData.get('interval');
+    // const inputs = Object.fromEntries(formData);
 
-    if (typeof description !== "string" || description.length === 0) {
+    const reference = formData.get('reference');
+    const title = formData.get('title');
+    const definition = formData.get('definition');
+    const method = formData.get('method');
+    const location = formData.get('location');
+    const criteria = formData.get('criteria');
+    const record = formData.get('record');
+    const comments = formData.get('comments');
+
+    const errors = {};
+
+    if (typeof reference !== "string" || reference.length === 0)
+        errors.reference = "Reference is required";
+
+    if (typeof title !== "string" || title.length === 0)
+        errors.title = "Title is required";
+
+    if (typeof definition !== "string" || definition.length === 0)
+        errors.definition = "Definition is required";
+
+    if (typeof method !== "string" || (method !== 'DAILY' && method !== 'WEEKLY' && method !== 'MONTLY'))
+        errors.method = "Method is required";
+
+    if (typeof location !== "string" || location.length === 0)
+        errors.location = "Location is required";
+
+
+    if (typeof criteria !== "string" || criteria.length === 0)
+        errors.location = "Criteria is required";
+
+
+    if (typeof record !== "string" || record.length === 0)
+        errors.record = "Record is required";
+
+
+    if (typeof comments !== "string" || comments.length === 0)
+        errors.comments = "Comments is required";
+
+    for (let key in errors) {
         return json(
-            { errors: { description: "Description is required" } },
+            { errors },
             { status: 400 },
         );
     }
 
-    if (typeof interval !== "string" || (interval !== 'DAILY' && interval !== 'WEEKLY' && interval !== 'MONTLY'))
-        return json(
-            { errors: { interval: "Interval value isn't correct" } },
-            { status: 400 },
-        );
-
-    const todo = await createTodo({ description, interval, userId });
+    await createTodo({ reference, title, definition, method, location, criteria, record, comments, userId })
     return redirect('/todos');
 }
 
@@ -32,19 +63,26 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function NewTodoPage() {
     const actionData = useActionData<typeof action>();
 
-    const descriptionRef = useRef<HTMLInputElement>(null);
-    const intervalRef = useRef<HTMLInputElement>(null);
+    const referenceRef = useRef<HTMLInputElement>(null);
+    const titleRef = useRef<HTMLInputElement>(null);
+    const definitionRef = useRef<HTMLInputElement>(null);
+    const methodRef = useRef<HTMLInputElement>(null);
+    const locationRef = useRef<HTMLInputElement>(null);
+    const criteriaRef = useRef<HTMLInputElement>(null);
+    const recordRef = useRef<HTMLInputElement>(null);
+    const commentsRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (actionData?.errors?.description) {
-            descriptionRef.current?.focus();
-        }
-
-        if (actionData?.errors?.interval) {
-            intervalRef.current?.focus();
-        }
-
+        if (actionData?.errors?.reference) referenceRef.current?.focus();
+        if (actionData?.errors?.title) titleRef.current?.focus();
+        if (actionData?.errors?.definition) definitionRef.current?.focus();
+        if (actionData?.errors?.method) methodRef.current?.focus();
+        if (actionData?.errors?.location) locationRef.current?.focus();
+        if (actionData?.errors?.criteria) criteriaRef.current?.focus();
+        if (actionData?.errors?.record) recordRef.current?.focus();
+        if (actionData?.errors?.comments) commentsRef.current?.focus();
     }, [actionData]);
+
 
     // const errors = useActionData<typeof action>();
 
@@ -53,36 +91,140 @@ export default function NewTodoPage() {
             <h1>new Todo page</h1>
             <Form method="post">
                 <div>
+                    {/* reference */}
                     <label className="flex w-full flex-col gap-1">
-                        <span>Todo description:</span>
+                        <span>Refernce:</span>
                         <input
-                            ref={descriptionRef}
+                            ref={referenceRef}
                             type="text"
-                            name="description"
+                            name="reference"
                             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
-                            aria-invalid={actionData?.errors?.description ? true : undefined}
-                            aria-errormessage={actionData?.errors?.description ? "name-error" : undefined}
+                            aria-invalid={actionData?.errors?.reference ? true : undefined}
+                            aria-errormessage={actionData?.errors?.reference ? "name-error" : undefined}
                         />
                     </label>
-                    {actionData?.errors?.description ? (
+                    {actionData?.errors?.reference ? (
                         <div className="pt-1 text-red-700" id="title-error">
-                            {actionData.errors.description}
+                            {actionData.errors.reference}
                         </div>
                     ) : null}
+                    {/* title */}
                     <label className="flex w-full flex-col gap-1">
-                        <span>Todo interval:</span>
+                        <span>TItle:</span>
                         <input
-                            ref={intervalRef}
-                            type="text"
-                            name="interval"
+                            ref={titleRef}
+                            type="title"
+                            name="title"
                             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
-                            aria-invalid={actionData?.errors?.interval ? true : undefined}
-                            aria-errormessage={actionData?.errors?.interval ? "name-error" : undefined}
+                            aria-invalid={actionData?.errors?.title ? true : undefined}
+                            aria-errormessage={actionData?.errors?.title ? "name-error" : undefined}
                         />
                     </label>
-                    {actionData?.errors?.interval ? (
+                    {actionData?.errors?.title ? (
                         <div className="pt-1 text-red-700" id="title-error">
-                            {actionData.errors.interval}
+                            {actionData.errors.title}
+                        </div>
+                    ) : null}
+                    {/* definition */}
+                    <label className="flex w-full flex-col gap-1">
+                        <span>Definition:</span>
+                        <input
+                            ref={definitionRef}
+                            type="text"
+                            name="definition"
+                            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+                            aria-invalid={actionData?.errors?.definition ? true : undefined}
+                            aria-errormessage={actionData?.errors?.definition ? "name-error" : undefined}
+                        />
+                    </label>
+                    {actionData?.errors?.definition ? (
+                        <div className="pt-1 text-red-700" id="title-error">
+                            {actionData.errors.definition}
+                        </div>
+                    ) : null}
+                    {/* method */}
+                    <label className="flex w-full flex-col gap-1">
+                        <span>Method:</span>
+                        <input
+                            ref={methodRef}
+                            type="text"
+                            name="method"
+                            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+                            aria-invalid={actionData?.errors?.method ? true : undefined}
+                            aria-errormessage={actionData?.errors?.method ? "name-error" : undefined}
+                        />
+                    </label>
+                    {actionData?.errors?.method ? (
+                        <div className="pt-1 text-red-700" id="title-error">
+                            {actionData.errors.method}
+                        </div>
+                    ) : null}
+                    {/* location */}
+                    <label className="flex w-full flex-col gap-1">
+                        <span>Location:</span>
+                        <input
+                            ref={locationRef}
+                            type="text"
+                            name="location"
+                            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+                            aria-invalid={actionData?.errors?.location ? true : undefined}
+                            aria-errormessage={actionData?.errors?.location ? "name-error" : undefined}
+                        />
+                    </label>
+                    {actionData?.errors?.location ? (
+                        <div className="pt-1 text-red-700" id="title-error">
+                            {actionData.errors.location}
+                        </div>
+                    ) : null}
+                    {/* criteria */}
+                    <label className="flex w-full flex-col gap-1">
+                        <span>Criteria:</span>
+                        <input
+                            ref={criteriaRef}
+                            type="text"
+                            name="criteria"
+                            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+                            aria-invalid={actionData?.errors?.criteria ? true : undefined}
+                            aria-errormessage={actionData?.errors?.criteria ? "name-error" : undefined}
+                        />
+                    </label>
+                    {actionData?.errors?.criteria ? (
+                        <div className="pt-1 text-red-700" id="title-error">
+                            {actionData.errors.criteria}
+                        </div>
+                    ) : null}
+                    {/* record */}
+                    <label className="flex w-full flex-col gap-1">
+                        <span>Record:</span>
+                        <input
+                            ref={locationRef}
+                            type="text"
+                            name="record"
+                            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+                            aria-invalid={actionData?.errors?.location ? true : undefined}
+                            aria-errormessage={actionData?.errors?.location ? "name-error" : undefined}
+                        />
+                    </label>
+                    {actionData?.errors?.location ? (
+                        <div className="pt-1 text-red-700" id="title-error">
+                            {actionData.errors.location}
+                        </div>
+                    ) : null}
+                    {/* comments */}
+                    <label className="flex w-full flex-col gap-1">
+                        <span>Comments:</span>
+                        <input
+                            ref={commentsRef}
+                            type="text"
+                            name="comments"
+                            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
+                            aria-invalid={actionData?.errors?.comments ? true : undefined}
+                            aria-errormessage={actionData?.errors?.comments ? "name-error" : undefined}
+                        />
+                    </label>
+                    {actionData?.errors?.comments ? (
+                        <div className="pt-1 text-red-700" id="title-error">
+                            {actionData.errors.comments}
                         </div>
                     ) : null}
                 </div>
