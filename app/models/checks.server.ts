@@ -18,10 +18,10 @@ export async function getCheckById(id: Check['id']) {
     })
 }
 
-export async function createCheck({ comment, todoId, userId }: Pick<Check, 'comment' | 'todoId' | 'userId'>) {
+export async function createCheck({ todoId, userId }: Pick<Check, 'todoId' | 'userId'>) {
     return await prisma.check.create({
         data: {
-            comment, todoId, userId
+            todoId, userId
         }
     })
 }
