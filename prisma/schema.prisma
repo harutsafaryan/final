@@ -41,7 +41,7 @@ model Note {
 
 model Check {
   id      Int     @id @default(autoincrement())
-  comment String?
+  record String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,13 +56,10 @@ model Check {
 model Todo {
   id Int @id @default(autoincrement())
 
-  reference  String   @unique
   title      String
   definition String
-  method     Interval @default(DAILY)
   location   String
   criteria   String
-  record     String
   comments   String
 
   createdAt DateTime @default(now())
@@ -71,12 +68,32 @@ model Todo {
 
   checks Check[]
 
-  user   User @relation(fields: [userId], references: [id])
   userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  referenceId Int
+  reference   Reference @relation(fields: [referenceId], references: [id])
+
+  methodId Int
+  method   Method @relation(fields: [methodId], references: [id])
 }
 
-enum Interval {
-  DAILY
-  WEEKLY
-  MONTLY
+model Reference {
+  id     Int     @id @default(autoincrement())
+  name   String
+  active Boolean @default(true)
+
+  todos Todo[]
+}
+
+model Method {
+  id     Int     @id @default(autoincrement())
+  name   String
+  active Boolean @default(true)
+  hours  Int?
+  days   Int?
+  week   Int?
+  month  Int?
+
+  todos Todo[]
 }

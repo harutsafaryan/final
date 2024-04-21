@@ -40,6 +40,37 @@ async function seed() {
     },
   });
 
+  await prisma.reference.createMany({
+    data: [
+      { name: 'Glass product'},
+      { name: 'Seal: assembly seal'},
+      { name: 'Insulating glazing'},
+      { name: 'Desiccant'},
+      { name: 'Filling gas'},
+      { name: 'Sealant: elastomer'},
+      { name: 'Sealant: hot-melt'},
+      { name: 'Spacer: metal and synthetic material'},
+      { name: 'Spacer: organic extruded'},
+      { name: 'System: Georgian bar'},
+      { name: 'System: renovation'},
+      { name: 'Balanced'},
+      { name: 'Seal: butyl'},
+      { name: 'Sealant'},
+      { name: 'Measurement equipment'},
+      { name: 'Equipment test'},
+      { name: 'Claim'},
+    ],
+  })
+
+  await prisma.method.createMany({
+    data: [
+      { name: 'day'},
+      { name: 'every hour'},
+      { name: 'week'},
+      { name: 'month'}
+    ],
+  })
+
   console.log(`Database has been seeded. 🌱`);
 }
 

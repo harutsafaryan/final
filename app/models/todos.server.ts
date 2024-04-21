@@ -2,7 +2,12 @@ import type { User, Todo } from "@prisma/client";
 import { prisma } from "~/db.server";
 
 export async function getTodos() {
-    return await prisma.todo.findMany();
+    return await prisma.todo.findMany({
+        include : {
+            reference : true,
+            method : true
+        }
+    });
 }
 
 export async function deleteTodo(id: Todo['id']) {
@@ -14,26 +19,24 @@ export async function getTodoById(id: Todo['id']) {
 }
 
 export async function createTodo({
-    reference,
     title,
     definition,
-    method,
     location,
     criteria,
-    record,
     comments,
+    methodId,
+    referenceId,
     userId
-}: Pick<Todo, 'reference' | 'title' | 'definition' | 'method' | 'location' |'criteria' | 'record' | 'comments' | 'userId'>) {
+}: Pick<Todo, 'title' | 'definition' | 'location' | 'criteria' | 'comments' | 'methodId' | 'referenceId' | 'userId'>) {
     return await prisma.todo.create({
         data: {
-            reference,
             title,
             definition,
-            method,
             location,
             criteria,
-            record,
             comments,
+            methodId,
+            referenceId,
             userId
         }
     })
