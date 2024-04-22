@@ -59,7 +59,7 @@ function Layout({ children, user }: any) {
             ['Machines', '/machines'],
             ['Login', '/login'],
             ['Logout', '/logout'],
-            ['Register', '/register']
+            ['Register', '/join']
           ].map(([title, url], index) => (
             <Link key={index} to={url} className="text-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium">{title}</Link>
           ))

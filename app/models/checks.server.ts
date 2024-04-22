@@ -36,3 +36,10 @@ export async function generateChecks() {
         }
     })
 }
+
+export async function lastAction() {
+    return await prisma.check.groupBy({
+        by: ['todoId'],
+        _max: { createdAt: true }
+    })
+}
