@@ -1,9 +1,12 @@
-import { useFetcher } from "@remix-run/react";
+import { redirect, useFetcher, useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { GoChecklist, GoCheck } from "react-icons/go";
+import PulseLoader from "react-spinners/PulseLoader";
+import ClipLoader from "react-spinners/PulseLoader";
 
-export default function TodoItem({ todo }) {
+export default function TodoItem({ todo, last }) {
     const fetcher = useFetcher();
+    const navigate = useNavigate();
     const isSaving = fetcher.state === 'idle';
 
     const [showRecord, setShowRecord] = useState(true);
@@ -18,7 +21,11 @@ export default function TodoItem({ todo }) {
                         <span className="inline-flex flex-shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                             {todo.reference.name}
                         </span>
-                        <p>Last action:</p>
+                        <p>Last action:
+                            <span>
+                                {fetcher.state === 'idle' ? calculateLastAction(last) : <PulseLoader    size={5} color="orange" />}
+                            </span>
+                        </p>
                     </div>
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.definition}</p>
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.location}</p>
@@ -37,6 +44,11 @@ export default function TodoItem({ todo }) {
                             Comply
                         </button>
                     </div>
+                    <div className="flex basis-1/3">
+                        <button type="button" onClick={() => navigate(`/todoEdit/${todo.id}`)}>
+                        Edit
+                        </button>
+                    </div>
                     <fetcher.Form method="post" className="flex basis-2/3 hover:bg-green-500">
                         <input title="todoId" type="hidden" name="todoId" value={todo.id} />
                         <input title="record" type="hidden" name="comment" value={record} />
@@ -51,4 +63,14 @@ export default function TodoItem({ todo }) {
             </div>
         </div>
     )
+}
+
+function calculateLastAction(history) {
+    if (history.length === 0) {
+        return 'no history';
+    }
+    else {
+        const last = new Date(history[0]?._max.createdAt).toLocaleString();
+        return last;
+    }
 }

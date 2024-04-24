@@ -1,9 +1,11 @@
-import { json } from "@remix-run/node"
+import { LoaderFunctionArgs, json } from "@remix-run/node"
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { generateChecks, getChecks } from "~/models/checks.server";
+import { requireUser, requireUserId } from "~/session.server";
 
-export async function loader() {
-    await generateChecks();
+export async function loader({request} : LoaderFunctionArgs) {
+    // await generateChecks();
+    await requireUserId(request);
     const checks = await getChecks()
 
     return json({ checks });

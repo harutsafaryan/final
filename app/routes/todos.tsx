@@ -8,10 +8,9 @@ import TodoList from "~/components/TodoList";
 
 export async function loader() {
     const todos = await getTodos();
-    const last = await lastAction();
-    console.log('lastAction: ', last);
+    const lastActions = await lastAction();
 
-    return json({ todos });
+    return json({ todos, lastActions });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -26,18 +25,20 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Todos() {
-    const { todos } = useLoaderData<typeof loader>();
+    const { todos, lastActions } = useLoaderData<typeof loader>();
+
+    console.log('lastactions: ',lastActions)
     const navigate = useNavigate();
 
     return (
         <div>
             <div>
-                <button className="rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" onClick={() => navigate('/todos/new')}>New</button>
+                <button className="rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" onClick={() => navigate('/todoNew')}>New</button>
             </div>
-            <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1">
                 {todos.map((todo) => (
                     <li key={todo.id} >
-                        <TodoItem todo={todo} key={todo.id} />
+                        <TodoItem todo={todo} key={todo.id} last={lastActions.filter(e => e.todoId === todo.id)}/>
                     </li>
                 ))}
             </ul>

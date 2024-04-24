@@ -19,6 +19,7 @@ export async function getCheckById(id: Check['id']) {
 }
 
 export async function createCheck({ record, todoId, userId }: Pick<Check, 'record' | 'todoId' | 'userId'>) {
+    await new Promise(res => setTimeout(res, 500));
     return await prisma.check.create({
         data: {
             record, todoId, userId
