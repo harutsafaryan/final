@@ -19,10 +19,16 @@ export async function getCheckById(id: Check['id']) {
 }
 
 export async function createCheck({ record, todoId, userId }: Pick<Check, 'record' | 'todoId' | 'userId'>) {
+    const now = new Date();
+
     await new Promise(res => setTimeout(res, 500));
     return await prisma.check.create({
         data: {
-            record, todoId, userId
+            record, todoId, userId,
+            year : now.getFullYear(),
+            month : now.getMonth(),
+            weekday : now.getDay(),
+            day : now.getDate()
         }
     })
 }
@@ -42,5 +48,19 @@ export async function lastAction() {
     return await prisma.check.groupBy({
         by: ['todoId'],
         _max: { createdAt: true }
+    })
+}
+
+export async function checkCount() {
+    return prisma.check.groupBy({
+        by : ['todoId'],
+        _count : true
+    })
+}
+
+export async function groupChecks(date : Date) {
+    return await prisma.check.groupBy({
+        by : ['date'],
+        _count : {date : true}
     })
 }

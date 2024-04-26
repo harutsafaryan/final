@@ -4,10 +4,11 @@ import { GoChecklist, GoCheck } from "react-icons/go";
 import PulseLoader from "react-spinners/PulseLoader";
 import ClipLoader from "react-spinners/PulseLoader";
 
-export default function TodoItem({ todo, last }) {
+export default function TodoItem({ todo, last, checkCount }) {
     const fetcher = useFetcher();
     const navigate = useNavigate();
     const isSaving = fetcher.state === 'idle';
+    console.log('count: ', checkCount)
 
     const [showRecord, setShowRecord] = useState(true);
     const [record, setRecord] = useState("");
@@ -23,7 +24,12 @@ export default function TodoItem({ todo, last }) {
                         </span>
                         <p>Last action:
                             <span>
-                                {fetcher.state === 'idle' ? calculateLastAction(last) : <PulseLoader    size={5} color="orange" />}
+                                {fetcher.state === 'idle' ? calculateLastAction(last) : <PulseLoader size={5} color="orange" />}
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                            checks: {fetcher.state === 'idle' ? checkCount[0]._count : <PulseLoader size={5} color="orange" />}
                             </span>
                         </p>
                     </div>
@@ -46,7 +52,7 @@ export default function TodoItem({ todo, last }) {
                     </div>
                     <div className="flex basis-1/3">
                         <button type="button" onClick={() => navigate(`/todoEdit/${todo.id}`)}>
-                        Edit
+                            Edit
                         </button>
                     </div>
                     <fetcher.Form method="post" className="flex basis-2/3 hover:bg-green-500">
@@ -70,7 +76,7 @@ function calculateLastAction(history) {
         return 'no history';
     }
     else {
-        const last = new Date(history[0]?._max.createdAt).get;
+        const last = new Date(history[0]?._max.createdAt).toDateString();
         return last;
     }
 }

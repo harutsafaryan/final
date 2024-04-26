@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, Outlet, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { getTodos } from "~/models/todos.server";
-import { createCheck, lastAction } from "~/models/checks.server";
+import { checkCount, createCheck, lastAction } from "~/models/checks.server";
 import { requireUserId } from "~/session.server";
 import TodoItem from "~/components/TodoItem";
 import TodoList from "~/components/TodoList";
@@ -10,8 +10,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await requireUserId(request);
     const todos = await getTodos();
     const lastActions = await lastAction();
+    const checkCounts = await checkCount();
 
-    return json({ todos, lastActions });
+    console.log('cc: ', checkCounts)
+
+    return json({ todos, lastActions, checkCounts });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -26,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Todos() {
-    const { todos, lastActions } = useLoaderData<typeof loader>();
+    const { todos, lastActions, checkCounts } = useLoaderData<typeof loader>();
     const navigate = useNavigate();
 
     return (
@@ -38,7 +41,12 @@ export default function Todos() {
             <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1">
                 {todos.map((todo) => (
                     <li key={todo.id} >
-                        <TodoItem todo={todo} key={todo.id} last={lastActions.filter(e => e.todoId === todo.id)} />
+                        <TodoItem
+                            todo={todo}
+                            key={todo.id}
+                            last={lastActions.filter(e => e.todoId === todo.id)}
+                            checkCount={checkCounts.filter(e => e.todoId === todo.id)}
+                        />
                     </li>
                 ))}
             </ul>
