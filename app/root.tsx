@@ -38,7 +38,7 @@ const navigation = [
   { name: 'Dashboard', link: '#', icon: HomeIcon, current: true },
   { name: 'Team', link: '/team', icon: UsersIcon, current: false },
   { name: 'Projects', link: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', link: '#', icon: CalendarIcon, current: false },
+  { name: 'Calendar', link: '/calendar', icon: CalendarIcon, current: false },
   { name: 'Documents', link: '#', icon: DocumentDuplicateIcon, current: false },
   { name: 'Reports', link: '#', icon: ChartPieIcon, current: false },
   { name: 'Todos', link: '/todos', icon: Square3Stack3DIcon, current: false },

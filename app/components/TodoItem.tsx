@@ -70,7 +70,7 @@ function calculateLastAction(history) {
         return 'no history';
     }
     else {
-        const last = new Date(history[0]?._max.createdAt).toLocaleString();
+        const last = new Date(history[0]?._max.createdAt).get;
         return last;
     }
 }

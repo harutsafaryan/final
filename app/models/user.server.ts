@@ -37,6 +37,12 @@ export async function deleteUserByEmail(email: User["email"]) {
   return prisma.user.delete({ where: { email } });
 }
 
+export async function deleteUserById(id: User["id"]) {
+  await new Promise(res => setTimeout(res, 2000));
+  return prisma.user.delete({ where: { id } });
+}
+
+
 export async function verifyLogin(
   email: User["email"],
   password: Password["hash"],
