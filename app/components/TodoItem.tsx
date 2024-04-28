@@ -57,7 +57,7 @@ export default function TodoItem({ todo, last, checkCount }) {
                     </div>
                     <fetcher.Form method="post" className="flex basis-2/3 hover:bg-green-500">
                         <input title="todoId" type="hidden" name="todoId" value={todo.id} />
-                        <input title="record" type="hidden" name="comment" value={record} />
+                        <input title="record" type="hidden" name="record" value={record} />
                         <button type="submit"
                             className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                         >

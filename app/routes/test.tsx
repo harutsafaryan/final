@@ -1,11 +1,26 @@
-function classNames(...classes: Array<String>) {
-    return classes.filter(Boolean).join(' ')
+import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
+import { url } from "inspector";
+import { getChecksByDateInterval, getChecksByMonth, groupCheckByDate } from "~/models/checks.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+
+    const url = new URL(request.url);
+    const month = url.searchParams.get('month');
+    const checks = await getChecksByMonth(Number(month));
+    console.log('checks: ',  checks);
+    return json({checks});
 }
 
 export default function Test() {
-    console.log('hello')
-    const days = getDays();
-    console.log('days: ', days);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const {checks} = useLoaderData<typeof loader>();
+    console.log('checks... ', checks);
+    console.log('checks type ', checks.length);
+
+    const month = searchParams.get('month');
+    const days = getDays(Number(month), checks);
 
     return (
         <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
@@ -116,74 +131,74 @@ export default function Test() {
                 </div>
             </div>
 
-
+            <ul>
+                <li>
+                    <button onClick={() => { const params = new URLSearchParams(); params.set('month', '0'), setSearchParams(params) }}>January</button>
+                </li>
+                <li>
+                    <button onClick={() => { const params = new URLSearchParams(); params.set('month', '1'), setSearchParams(params) }}>February</button>
+                </li>
+                <li>
+                    <button onClick={() => { const params = new URLSearchParams(); params.set('month', '2'), setSearchParams(params) }}>March</button>
+                </li>
+                <li>
+                    <button onClick={() => { const params = new URLSearchParams(); params.set('month', '3'), setSearchParams(params) }}>April</button>
+                </li>
+                <li>
+                    <button onClick={() => { const params = new URLSearchParams(); params.set('month', '4'), setSearchParams(params) }}>May</button>
+                </li>
+                <li>
+                    <button onClick={() => { const params = new URLSearchParams(); params.set('month', '5'), setSearchParams(params) }}>June</button>
+                </li>
+            </ul>
         </div>
     )
 }
 
 
 
-function getDays() {
-    const today = new Date(2024, 2, 5);
-    const month = today.getMonth();
-    const year = today.getFullYear();
+function getDays(month: number, checks : []) {
+    const year = 2024
 
-    const days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+    let daysCount = 30;
     const dates = [];
 
-    switch (month) {
-        case 0:
-        case 2:
-        case 4:
-        case 6:
-        case 7:
-        case 9:
-        case 11:
-            days.push(31);
-            break;
-        case 1:
-            (2024 % 4 === 0) ? days.pop() : days.splice(28, 2);
-            break;
-        default:
-            break;
+
+    if (month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11)
+        daysCount = 31;
+    else if (month === 1 && year % 4 === 0)
+        daysCount = 29;
+    else if (month === 1 && year % 4 !== 0)
+        daysCount = 28;
+
+
+    const startWeekDay = new Date(year, month, 1).getDay();
+    const endtWeekDay = new Date(year, month, daysCount).getDay();
+
+    let daysBefore = 0;
+    if (startWeekDay === 0)
+        daysBefore = 6;
+    else
+        daysBefore = startWeekDay - 1;
+
+    let daysAfter = 0;
+    if (endtWeekDay === 0)
+        daysAfter = 0;
+    else
+        daysAfter = 7 - endtWeekDay;
+
+    for (let i = 1 - daysBefore; i <= daysCount + daysAfter; i++) {
+        dates.push({
+            date: new Date(year, month, i),
+            isCurrentMonth: i > 0 && i <= daysCount,
+            isSelected: false,
+            events: [{ id: 1, name: 'Cinema with friends' }],
+        })
     }
-
-    days.forEach((day) => dates.push({
-        date: new Date(year, month, day),
-        isCurrentMonth: true,
-        isSelected: false,
-        events: []
-    }))
-
-    const first = dates[0].date.getDay();
-    const last = dates[dates.length - 1].date.getDay();
-
-    console.log('first: ', first)
-
-    if (first !== 1) {
-        const newArr = []
-        for (let i = 0; i < first-1; i++) {
-            newArr.push({
-                date: new Date(year, month, -i),
-                isCurrentMonth: false,
-                isSelected: false,
-                events: []
-            })
-        }
-
-        dates.unshift(...newArr)
-    }
-
-    // if (last !== 0) {
-    //     for (let i = 1; i < 6; i++) {
-    //         dates.push({
-    //             date: new Date(year, month+1, i),
-    //             isCurrentMonth: false,
-    //             isSelected: false,
-    //             events: []
-    //         })
-    //     }
-    // }
 
     return dates;
+}
+
+function classNames(...classes: Array<String>) {
+    return classes.filter(Boolean).join(' ')
 }

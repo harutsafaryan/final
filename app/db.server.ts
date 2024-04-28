@@ -41,11 +41,34 @@ function getPrismaClient() {
         url: databaseUrl.toString(),
       },
     },
+  }).$extends({
+    result : {
+      check : {
+        year : {
+          needs : {createdAt : true},
+          compute(check) {
+            return check.createdAt.getFullYear();
+          }
+        },
+        month : {
+          needs : {createdAt : true},
+          compute(check) {
+            return check.createdAt.getMonth();
+          }
+        },
+        day : {
+          needs : {createdAt : true},
+          compute(check) {
+            return check.createdAt.getDate();
+          }
+        }
+      }
+    }
   });
-  // connect eagerly
-  client.$connect();
+// connect eagerly
+client.$connect();
 
-  return client;
+return client;
 }
 
 export { prisma };

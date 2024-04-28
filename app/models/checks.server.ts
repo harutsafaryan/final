@@ -25,10 +25,10 @@ export async function createCheck({ record, todoId, userId }: Pick<Check, 'recor
     return await prisma.check.create({
         data: {
             record, todoId, userId,
-            year : now.getFullYear(),
-            month : now.getMonth(),
-            weekday : now.getDay(),
-            day : now.getDate()
+            year: now.getFullYear(),
+            month: now.getMonth(),
+            weekday: now.getDay(),
+            day: now.getDate()
         }
     })
 }
@@ -52,15 +52,58 @@ export async function lastAction() {
 }
 
 export async function checkCount() {
-    return prisma.check.groupBy({
-        by : ['todoId'],
-        _count : true
+    return await prisma.check.groupBy({
+        by: ['todoId'],
+        _count: true
     })
 }
 
-export async function groupChecks(date : Date) {
+export async function groupCheckByDate() {
     return await prisma.check.groupBy({
-        by : ['date'],
-        _count : {date : true}
+        by: ['createdAt'],
+        _count: { month: true }
+    })
+}
+
+export async function groupChecks(date: Date) {
+    return await prisma.check.groupBy({
+        by: ['date'],
+        _count: { date: true }
+    })
+}
+
+export async function getChecksByDateInterval(from: Date, to: Date) {
+    return await prisma.check.findMany({
+        where: {
+            AND: [
+                { createdAt: { gte: from } },
+                { createdAt: { lte: to } }
+            ]
+        }
+    })
+}
+
+export async function getChecksByMonth(month: number) {
+    const startDate = new Date(2024, month, 1);
+    const endDate = new Date(2024, month + 1, 1);
+
+    return await prisma.check.findMany({
+        where: {
+            AND: [
+                { createdAt: { gte: startDate } },
+                { createdAt: { lte: endDate } },
+            ]
+        },
+        select: {
+            id: true,
+            year: true,
+            month : true,
+            day : true,
+            todo: {
+                select: {
+                    title: true
+                }
+            }
+        }
     })
 }

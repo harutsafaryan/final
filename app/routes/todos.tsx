@@ -12,8 +12,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const lastActions = await lastAction();
     const checkCounts = await checkCount();
 
-    console.log('cc: ', checkCounts)
-
     return json({ todos, lastActions, checkCounts });
 }
 
