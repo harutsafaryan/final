@@ -29,7 +29,7 @@ export default function TodoItem({ todo, last, checkCount }) {
                         </p>
                         <p>
                             <span>
-                            checks: {fetcher.state === 'idle' ? checkCount[0]._count : <PulseLoader size={5} color="orange" />}
+                            checks: {fetcher.state === 'idle' ? (checkCount.length === 0 ? 0 : checkCount[0]._count) : <PulseLoader size={5} color="orange" />}
                             </span>
                         </p>
                     </div>
@@ -38,7 +38,7 @@ export default function TodoItem({ todo, last, checkCount }) {
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.criteria}</p>
                     {showRecord && <input placeholder="record" className="border border-gray-800" onChange={(e) => setRecord(e.target.value)} />}
                 </div>
-                {/* <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={todo.imageUrl} alt="" /> */}
+                <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={todo.imageUrl} alt="" />
             </div>
             <div>
                 <div className="flex flex-row divide-x divide-gray-200">

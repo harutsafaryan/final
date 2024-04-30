@@ -25,10 +25,6 @@ export async function createCheck({ record, todoId, userId }: Pick<Check, 'recor
     return await prisma.check.create({
         data: {
             record, todoId, userId,
-            year: now.getFullYear(),
-            month: now.getMonth(),
-            weekday: now.getDay(),
-            day: now.getDate()
         }
     })
 }
