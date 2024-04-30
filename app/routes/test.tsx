@@ -8,7 +8,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const month = url.searchParams.get('month');
     const checks = await getChecksByMonth(Number(month));
-    console.log('checks: ',  checks);
     return json({checks});
 }
 
@@ -16,8 +15,6 @@ export default function Test() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const {checks} = useLoaderData<typeof loader>();
-    console.log('checks... ', checks);
-    console.log('checks type ', checks.length);
 
     const month = searchParams.get('month');
     const days = getDays(Number(month), checks);
@@ -163,6 +160,9 @@ function getDays(month: number, checks : []) {
     let daysCount = 30;
     const dates = [];
 
+    // console.log('checks... ', checks.find(e => e.id === 10));
+
+
 
     if (month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11)
         daysCount = 31;
@@ -192,10 +192,12 @@ function getDays(month: number, checks : []) {
             date: new Date(year, month, i),
             isCurrentMonth: i > 0 && i <= daysCount,
             isSelected: false,
-            events: [{ id: 1, name: 'Cinema with friends' }],
+            // events: [{ id: 1, name: 'Cinema with friends' }],
+            events: checks.filter(e => e.day === i).map(e => ({id: e.id, name: e.todo.title}))
         })
     }
 
+    console.log('dates: ', dates);
     return dates;
 }
 
