@@ -1,5 +1,6 @@
 import type { User, Check } from "@prisma/client";
 import { prisma } from "~/db.server";
+import { getMonthIndex } from "~/utility/helper";
 
 export async function getChecks() {
     return await prisma.check.findMany();
@@ -79,9 +80,10 @@ export async function getChecksByDateInterval(from: Date, to: Date) {
     })
 }
 
-export async function getChecksByMonth(month: number) {
-    const startDate = new Date(2024, month, 1);
-    const endDate = new Date(2024, month + 1, 1);
+export async function getChecksByMonth(month: string) {
+    const monthIndex = getMonthIndex(month);
+    const startDate = new Date(2024, monthIndex, 1);
+    const endDate = new Date(2024, monthIndex + 1, 1);
 
     return await prisma.check.findMany({
         where: {
@@ -93,8 +95,8 @@ export async function getChecksByMonth(month: number) {
         select: {
             id: true,
             year: true,
-            month : true,
-            day : true,
+            month: true,
+            day: true,
             todo: {
                 select: {
                     title: true
