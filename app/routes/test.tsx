@@ -1,7 +1,9 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { url } from "inspector";
+import { useEffect } from "react";
 import MonthChange from "~/components/MonthChange";
+import MonthChange2 from "~/components/MonthChange2";
 import { getChecksByDateInterval, getChecksByMonth, groupCheckByDate } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 
@@ -18,16 +20,35 @@ export default function Test() {
     const [searchParams, setSearchParams] = useSearchParams();
     const checks = useLoaderData<typeof loader>();
 
-    let month = searchParams.get('month');
-    if (!month) {
-        let m = new Date().getMonth();
-        month = getMonthName(m);
-    }
-    const days = getDays(month, checks);
+    const month = searchParams.get('month');
+    const year = searchParams.get('year');
+    const days = getDays(month, Number(year), checks);
+
+    useEffect(() => {
+        const month = searchParams.get('month');
+        const year = searchParams.get('year');
+        const yearToday = new Date().getFullYear().toString();
+        const monthTodayIndex = new Date().getMonth();
+        const monthTodayName = getMonthName(monthTodayIndex);
+
+        if (!month)
+            setSearchParams((prev) => {
+                prev.set('month', monthTodayName);
+                return prev;
+            })
+
+        if (!year) {
+            setSearchParams((prev) => {
+                prev.set('year', yearToday);
+                return prev;
+            })
+        }
+
+    }, [searchParams])
 
     return (
         <div>
-            <MonthChange/>
+            <MonthChange2 />
             <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
                 <div className="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
                     <div className="bg-white py-2">
@@ -142,8 +163,7 @@ export default function Test() {
 
 
 
-function getDays(month: string | null, checks: []) {
-    const year = 2024;
+function getDays(month: string | null, year : number, checks: []) {
     const today = new Date();
     const todayMonth = today.getMonth();
     const todayYear = today.getFullYear();
