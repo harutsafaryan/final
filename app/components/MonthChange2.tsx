@@ -1,5 +1,4 @@
 import { Form, Link, useSearchParams, useSubmit } from "@remix-run/react";
-import { useState } from "react";
 
 export default function MonthChange2() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -10,6 +9,7 @@ export default function MonthChange2() {
     const checkedMonth = searchParams.get('month');
     const checkedYear = searchParams.get('year');
 
+    
     return (
         <div className="mb-3">
             <div className="flex justify-center">
@@ -23,7 +23,7 @@ export default function MonthChange2() {
                         }}
                         className={`rounded-full ${month === checkedMonth ? 'bg-white shadow-inner shadow-sky-500' : 'bg-white shadow-md shadow-sky-400'} m-2 px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-sky-200`}
                     >
-                        <p>month}</p>
+                        <p>{month[0]}<span className="sr-only sm:not-sr-only">{month.slice(1, 3)}</span></p>
                     </button>
                 ))}
             </div>
