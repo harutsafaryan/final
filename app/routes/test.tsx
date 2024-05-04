@@ -79,7 +79,7 @@ export default function Test() {
                             <div
                                 key={day.date.toString()}
                                 className={classNames(
-                                    day.isCurrentMonth ? 'bg-white' : 'bg-gray-50 text-gray-500',
+                                    day.isCurrentMonth ? 'bg-white' : 'bg-gray-100 text-gray-500',
                                     'relative px-3 py-2'
                                 )}
                             >
@@ -97,17 +97,11 @@ export default function Test() {
                                     <ol className="mt-1">
                                         {day.checks.slice(0, 2).map((check) => (
                                             <li key={check.id}>
-                                                <a href={check.href} className="group flex">
+                                                <div className="group flex">
                                                     <p className="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">
                                                         {check.name}
                                                     </p>
-                                                    <time
-                                                        dateTime={check.datetime}
-                                                        className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                                                    >
-                                                        {check.time}
-                                                    </time>
-                                                </a>
+                                                </div>
                                             </li>
                                         ))}
                                         {day.checks.length > 2 && <li className="text-gray-500">+ {day.checks.length - 2} more</li>}
