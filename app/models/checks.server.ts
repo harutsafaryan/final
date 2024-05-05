@@ -94,6 +94,7 @@ export async function getChecksByMonth(month: string) {
         },
         select: {
             id: true,
+            record : true,
             year: true,
             month: true,
             day: true,

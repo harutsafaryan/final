@@ -33,6 +33,7 @@ import {
   Square3Stack3DIcon
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { GenericErrorBoundary } from "./components/ErrorBoundary";
 
 const navigation = [
   { name: 'Dashboard', link: '#', icon: HomeIcon, current: true },
@@ -397,5 +398,11 @@ function Layout({ children, user }: any) {
         {children}
       </div>
     </>
+  )
+}
+
+export function ErrorBoundary() {
+  return (
+    <GenericErrorBoundary/>
   )
 }
