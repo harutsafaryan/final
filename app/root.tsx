@@ -375,31 +375,6 @@ export default function App() {
   );
 }
 
-function Layout({ children, user }: any) {
-
-  return (
-    <>
-      <nav className="bg-yellow-500 flex space-x-4 justify-center">
-        {
-          [
-            ['Todos', '/todos'],
-            ['Checks', '/checks'],
-            ['Machines', '/machines'],
-            ['Login', '/login'],
-            ['Logout', '/logout'],
-            ['Register', '/join']
-          ].map(([title, url], index) => (
-            <Link key={index} to={url} className="text-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium">{title}</Link>
-          ))
-        }
-        <p className="text-gray-900 rounded-md px-3 py-2 text-sm font-medium absolute right-0">{user && user.email}</p>
-      </nav>
-      <div className="container">
-        {children}
-      </div>
-    </>
-  )
-}
 
 export function ErrorBoundary() {
   return (

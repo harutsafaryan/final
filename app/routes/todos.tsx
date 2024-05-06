@@ -32,11 +32,11 @@ export default function Todos() {
 
     return (
         <div>
-            <p className="sm:text-lg text-center font-bold">{todos.length !== 0 ? "Todo list" : "Todo list is empty"}</p>
-            <div>
-                <button className="rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" onClick={() => navigate('/todoNew')}>Create new todo</button>
+            <div className="flex space-x-3 mb-2 justify-center">
+                <p className="sm:text-lg text-center font-bold">{todos.length !== 0 ? "Todo list" : "Todo list is empty"}</p>
+                <button className="rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" onClick={() => navigate('/todoNew')}>new </button>
             </div>
-            <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1">
+            <ul role="list" className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {todos.map((todo) => (
                     <li key={todo.id} >
                         <TodoItem
