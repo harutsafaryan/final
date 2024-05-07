@@ -19,7 +19,7 @@ export default function Checks() {
             <table className="min-w-full divide-y divide-gray-300">
                 <thead>
                     <tr>
-                        <th className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Comment</th>
+                        <th className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Record</th>
                         <th className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Created At</th>
                         <th className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Updated At</th>
                         <th className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Todo</th>
@@ -30,7 +30,7 @@ export default function Checks() {
                     {
                         checks.map(check => (
                             <tr key={check.id}>
-                            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{check.comment}</td>
+                            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{check.record}</td>
                             <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{new Date(check.createdAt).toLocaleString() }</td>
                             <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{new Date(check.updatedAt).toLocaleString() }</td>
                             <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{check.todoId}</td>

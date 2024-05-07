@@ -1,5 +1,5 @@
 import { redirect, useFetcher, useNavigate } from "@remix-run/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GoChecklist, GoCheck } from "react-icons/go";
 import { CiEdit } from "react-icons/ci";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -13,7 +13,6 @@ export default function TodoItem({ todo, last, checkCount }) {
     const fetcher = useFetcher();
     const navigate = useNavigate();
     const isSaving = fetcher.state === 'idle';
-    console.log('count: ', checkCount)
 
     const [visibility, setVisibility] = useState(false);
     const [record, setRecord] = useState("");
@@ -52,10 +51,12 @@ export default function TodoItem({ todo, last, checkCount }) {
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.location}</p>
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.criteria}</p>
                     <div className="flex">
-                        <CiEdit size={25} color="green" className="animate-pulse" onClick={() => setVisibility(!visibility)} />
+                        <CiEdit size={25} color="green" className="animate-pulse" onClick={handelVisibility} />
                         <input placeholder="enter result"
+                            value={record}
                             className={`border border-gray-800 ${visibility ? '' : "invisible"}`}
-                            onChange={(e) => setRecord(e.target.value)} />
+                            onChange={(e) => setRecord(e.target.value)}
+                        />
                     </div>
                 </div>
                 {/* <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={todo.imageUrl} alt="" /> */}
@@ -75,8 +76,9 @@ export default function TodoItem({ todo, last, checkCount }) {
                         />
                         <button type="submit"
                             onClick={handelSave}
+                            // disabled = {record.length === 0 || !visibility}
                             className={classNames(
-                                record ? "transition duration-1000 bg-emerald-500" : "transition duration-500 bg-slate-100",
+                                record && visibility ? "transition duration-1000 bg-emerald-400" : "transition duration-500 bg-slate-100",
                                 "relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                             )}
                         >
