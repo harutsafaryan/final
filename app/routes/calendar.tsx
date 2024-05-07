@@ -86,7 +86,6 @@ export default function Calendar() {
                                 className={classNames(
                                     day.isCurrentMonth ? 'bg-white hover:bg-yellow-100' : 'bg-gray-50 text-gray-500',
                                     'relative px-3 py-2'
-
                                 )}
                             >
                                 <p
@@ -103,12 +102,12 @@ export default function Calendar() {
                                     <ol className="mt-0">
                                         {day.checks.slice(0, 2).map((check) => (
                                             <li key={check.id}>
-                                                <p className="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">
+                                                <p className="flex-auto truncate font-medium text-xs text-gray-900 group-hover:text-indigo-600">
                                                     {check.name}
                                                 </p>
                                             </li>
                                         ))}
-                                        {day.checks.length > 2 && <li className="text-gray-500">+ {day.checks.length - 2} more</li>}
+                                        {day.checks.length > 2 && <li className="font-medium text-xs text-gray-500">+ {day.checks.length - 2} more</li>}
                                     </ol>
                                 )}
                             </div>
