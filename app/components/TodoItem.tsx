@@ -4,6 +4,7 @@ import { GoChecklist, GoCheck } from "react-icons/go";
 import { CiEdit } from "react-icons/ci";
 import PulseLoader from "react-spinners/PulseLoader";
 import ClipLoader from "react-spinners/PulseLoader";
+import { MdOutlineChevronRight } from "react-icons/md";
 
 function classNames(...classes: Array<String>) {
     return classes.filter(Boolean).join(' ')
@@ -16,15 +17,20 @@ export default function TodoItem({ todo, last, checkCount }) {
 
     const [visibility, setVisibility] = useState(false);
     const [record, setRecord] = useState("");
+    const [reset, setReset] = useState(true);
+
+    const [open, setOpen] = useState(false);
 
     const handelSave = () => {
-        setRecord("");
+        setReset(true)
+        setRecord("test");
         setVisibility(false);
     }
 
     const handelVisibility = () => {
         setRecord("");
         setVisibility(!visibility);
+        setOpen(!open);
     }
 
     return (
@@ -51,10 +57,14 @@ export default function TodoItem({ todo, last, checkCount }) {
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.location}</p>
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.criteria}</p>
                     <div className="flex">
-                        <CiEdit size={25} color="green" className="animate-pulse" onClick={handelVisibility} />
+                        <button onClick={handelVisibility}
+                            className={` bg-slate-200 rounded-full border-2 border-sky-700
+                                        cursor-pointer duration-300`}>
+                            <MdOutlineChevronRight className={` ${open && "rotate-180"} duration-300`} />
+                        </button>
                         <input placeholder="enter result"
                             value={record}
-                            className={`border border-gray-800 ${visibility ? '' : "invisible"}`}
+                            className={`flex-auto border-2 border-sky-700 rounded-tr ${!visibility ? 'scale-0' : "scale-x-100"} duration-500`}
                             onChange={(e) => setRecord(e.target.value)}
                         />
                     </div>
