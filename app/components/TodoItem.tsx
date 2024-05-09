@@ -1,10 +1,11 @@
 import { redirect, useFetcher, useNavigate } from "@remix-run/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GoChecklist, GoCheck } from "react-icons/go";
 import { CiEdit } from "react-icons/ci";
 import PulseLoader from "react-spinners/PulseLoader";
 import ClipLoader from "react-spinners/PulseLoader";
 import { MdOutlineChevronRight } from "react-icons/md";
+import { FiArrowRight } from "react-icons/fi";
 
 function classNames(...classes: Array<String>) {
     return classes.filter(Boolean).join(' ')
@@ -15,23 +16,20 @@ export default function TodoItem({ todo, last, checkCount }) {
     const navigate = useNavigate();
     const isSaving = fetcher.state === 'idle';
 
-    const [visibility, setVisibility] = useState(false);
     const [record, setRecord] = useState("");
-    const [reset, setReset] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
-    const [open, setOpen] = useState(false);
-
-    const handelSave = () => {
-        setReset(true)
-        setRecord("test");
-        setVisibility(false);
+    const handleSave = () => {
+        setIsOpen(false);
     }
 
-    const handelVisibility = () => {
+    const handleOpen = () => {
+        setIsOpen(!isOpen);
+    }
+
+    useEffect(() => {
         setRecord("");
-        setVisibility(!visibility);
-        setOpen(!open);
-    }
+    }, [isSaving])
 
     return (
         <div className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow-lg border-2 border-sky-800">
@@ -57,14 +55,14 @@ export default function TodoItem({ todo, last, checkCount }) {
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.location}</p>
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.criteria}</p>
                     <div className="flex">
-                        <button onClick={handelVisibility}
-                            className={` bg-slate-200 rounded-full border-2 border-sky-700
+                        <button onClick={handleOpen}
+                            className={`flex items-center bg-slate-200 rounded-full border-2 border-sky-700 h-8 w-8
                                         cursor-pointer duration-300`}>
-                            <MdOutlineChevronRight className={` ${open && "rotate-180"} duration-300`} />
+                            <FiArrowRight className={`text-lg ${isOpen && "rotate-180"} duration-300`} />
                         </button>
-                        <input placeholder="enter result"
+                        <input placeholder={todo.criteria}
                             value={record}
-                            className={`flex-auto border-2 border-sky-700 rounded-tr ${!visibility ? 'scale-0' : "scale-x-100"} duration-500`}
+                            className={`flex-auto border-2 border-sky-700 rounded-tr ${!isOpen ? 'scale-0' : "scale-x-100"} duration-500`}
                             onChange={(e) => setRecord(e.target.value)}
                         />
                     </div>
@@ -85,10 +83,9 @@ export default function TodoItem({ todo, last, checkCount }) {
                         <input title="record" type="hidden" name="record" value={record}
                         />
                         <button type="submit"
-                            onClick={handelSave}
-                            // disabled = {record.length === 0 || !visibility}
+                            onClick={handleSave}
                             className={classNames(
-                                record && visibility ? "transition duration-1000 bg-emerald-400" : "transition duration-500 bg-slate-100",
+                                record && isOpen ? "transition duration-1000 bg-emerald-400" : "transition duration-500 bg-slate-100",
                                 "relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                             )}
                         >
