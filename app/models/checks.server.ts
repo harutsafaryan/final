@@ -1,4 +1,4 @@
-import type { User, Check } from "@prisma/client";
+import type { User, Check, Todo } from "@prisma/client";
 import { prisma } from "~/db.server";
 import { getMonthIndex } from "~/utility/helper";
 
@@ -13,6 +13,16 @@ export async function deleteCheck(id: Check['id']) {
 export async function getCheckById(id: Check['id']) {
     return await prisma.check.findFirst({
         where: { id },
+        include: {
+            todo: true
+        }
+    })
+}
+
+export async function getChecksByTodoId(todoId: Todo['id']) {
+    await new Promise(res => setTimeout(res, 1500))
+    return await prisma.check.findMany({
+        where: { todoId },
         include: {
             todo: true
         }

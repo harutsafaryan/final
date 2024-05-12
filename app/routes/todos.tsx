@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, Outlet, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
+import { Form, Link, Outlet, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { getTodos } from "~/models/todos.server";
 import { checkCount, createCheck, lastAction } from "~/models/checks.server";
 import { requireUserId } from "~/session.server";
@@ -38,16 +38,17 @@ export default function Todos() {
             </div>
             <ul role="list" className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {todos.map((todo) => (
-                    <li key={todo.id} >
+                    <Link to={`../todo/details/${todo.id}`} key={todo.id} >
                         <TodoItem
                             todo={todo}
                             key={todo.id}
                             last={lastActions.filter(e => e.todoId === todo.id)}
                             checkCount={checkCounts.filter(e => e.todoId === todo.id)}
                         />
-                    </li>
+                    </Link>
                 ))}
             </ul>
+            <Outlet/>
         </div>
     )
 }
