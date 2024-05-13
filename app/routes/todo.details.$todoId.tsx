@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, Link, Outlet, useLoaderData, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
+import { Form, Link, Outlet, useLoaderData, useLocation, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
 import { useState } from "react";
 import invariant from "tiny-invariant";
 import { createCheck } from "~/models/checks.server";
@@ -29,6 +29,9 @@ export default function TodoPage() {
     const [value, setValue] = useState("");
     const [showHistory, setShowHistory] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const isHistoryView = location.pathname.endsWith('history');
 
     return (
         <div>
@@ -46,9 +49,10 @@ export default function TodoPage() {
                 </div>
             </Form>
             <div className="mt-4">
-                <Link to='history' className="p-1 border-2 rounded border-sky-500 hover:bg-sky-300">
-                    {showHistory ? "show history" : "hide history"}
-                </Link>
+                {isHistoryView
+                    ? <button onClick={() => navigate(-1)} className="p-1 border-2 rounded border-sky-500 hover:bg-sky-300">hide history</button>
+                    : <button onClick={() => navigate('history')} className="p-1 border-2 rounded border-sky-500 hover:bg-sky-300">show history</button>
+                }
                 <Outlet />
             </div>
         </div>

@@ -11,7 +11,7 @@ import { getMonthIndex, getMonthName } from "~/utility/helper";
 export async function loader({ request }: LoaderFunctionArgs) {
 
     const url = new URL(request.url);
-    const month = url.searchParams.get('month');
+    const month = url.searchParams.get('month') ?? "" ;
     const checks = await getChecksByMonth(month);
     return json(checks);
 }

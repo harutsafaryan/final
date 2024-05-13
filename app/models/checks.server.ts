@@ -20,11 +20,11 @@ export async function getCheckById(id: Check['id']) {
 }
 
 export async function getChecksByTodoId(todoId: Todo['id']) {
-    await new Promise(res => setTimeout(res, 1500))
     return await prisma.check.findMany({
         where: { todoId },
         include: {
-            todo: true
+            todo: true,
+            user : true
         }
     })
 }

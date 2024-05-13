@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
+import ChecksList from "~/components/ChecksList";
 import { getCheckById, getChecksByTodoId } from "~/models/checks.server";
 import { getTodoById } from "~/models/todos.server";
 
@@ -15,12 +16,6 @@ export default function ChecksHistory() {
     const {checks} = useLoaderData<typeof loader>();
 
     return (
-        <ul>
-            {checks.map(check => (
-                <li key={check.id}>
-                    {check.record}
-                </li>
-            ))}
-        </ul>
+        <ChecksList checksList={checks}/>
     )
 }

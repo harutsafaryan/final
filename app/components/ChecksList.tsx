@@ -1,4 +1,3 @@
-export default function ({ checksList }) {
 
     if (checksList.length === 0)
         return;
@@ -30,14 +29,14 @@ export default function ({ checksList }) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                                    {checksList.map((check) => (
+                                    {checksList.map((check : GetResult<{ id: number; record: string | null; createdAt: Date; updatedAt: Date; todoId: number; userId: number; }, unknown> & {}) => (
                                         <tr key={check.id}>
-                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                            <td className="whitespace-nowrap py-1 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                 {check.todo.title}
                                             </td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{check.record}</td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{new Date(check.createdAt).toLocaleTimeString()}</td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{check.user.name}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">{check.record}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">{new Date(check.createdAt).toLocaleTimeString()}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">{check.user.name}</td>
                                         </tr>
                                     ))}
                                 </tbody>
