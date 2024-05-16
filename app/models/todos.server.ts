@@ -4,7 +4,6 @@ import { prisma } from "~/db.server";
 export async function getTodos() {
     return await prisma.todo.findMany({
         include : {
-            method : true,
             reference : true
         }
     });

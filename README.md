@@ -259,3 +259,5 @@ Creating user
 Postgres cluster final-f55f-staging-db is now attached to final-f55f-staging
 The following secret was added to final-f55f-staging:
   DATABASE_URL=postgres://final_f55f_staging:7lzwdLAauwRu1O1@final-f55f-staging-db.flycast:5432/final_f55f_staging?sslmode=disable
+
+  npx prisma db push

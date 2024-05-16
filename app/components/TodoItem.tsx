@@ -1,11 +1,6 @@
 import { redirect, useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
-import { GoChecklist, GoCheck } from "react-icons/go";
-import { CiEdit } from "react-icons/ci";
 import PulseLoader from "react-spinners/PulseLoader";
-import ClipLoader from "react-spinners/PulseLoader";
-import { MdOutlineChevronRight } from "react-icons/md";
-import { FiArrowRight } from "react-icons/fi";
 
 function classNames(...classes: Array<String>) {
     return classes.filter(Boolean).join(' ')
@@ -54,44 +49,7 @@ export default function TodoItem({ todo, last, checkCount }) {
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.definition}</p>
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.location}</p>
                     <p className="mt-1 truncate text-sm text-gray-500">{todo.criteria}</p>
-                    <div className="flex">
-                        <button onClick={handleOpen}
-                            className={`flex items-center bg-slate-200 rounded-full border-2 border-sky-700 h-8 w-8
-                                        cursor-pointer duration-300`}>
-                            <FiArrowRight className={`text-lg ${isOpen && "rotate-180"} duration-300`} />
-                        </button>
-                        <input placeholder={todo.criteria}
-                            value={record}
-                            className={`flex-auto border-2 border-sky-700 rounded-tr ${!isOpen ? 'scale-0' : "scale-x-100"} duration-500`}
-                            onChange={(e) => setRecord(e.target.value)}
-                        />
-                    </div>
-                </div>
-                {/* <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={todo.imageUrl} alt="" /> */}
-            </div>
-            <div>
-                <div className="flex flex-row divide-x divide-gray-200">
-                    <div className="flex basis-1/2">
-                        <button type="button"
-                            className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
-                            onClick={() => navigate(`/todoEdit/${todo.id}`)}>
-                            Edit
-                        </button>
-                    </div>
-                    <fetcher.Form method="post" className="flex basis-1/2 ">
-                        <input title="todoId" type="hidden" name="todoId" value={todo.id} />
-                        <input title="record" type="hidden" name="record" value={record}
-                        />
-                        <button type="submit"
-                            onClick={handleSave}
-                            className={classNames(
-                                record && isOpen ? "transition duration-1000 bg-emerald-400" : "transition duration-500 bg-slate-100",
-                                "relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
-                            )}
-                        >
-                            {isSaving ? 'Save' : 'Saving...'}
-                        </button>
-                    </fetcher.Form>
+
                 </div>
             </div>
         </div>

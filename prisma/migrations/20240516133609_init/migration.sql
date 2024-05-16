@@ -1,9 +1,18 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
+
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('PASSED', 'FAIL', 'SUCCESS', 'UNKNOWN');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -29,9 +38,12 @@ CREATE TABLE "Note" (
 -- CreateTable
 CREATE TABLE "Check" (
     "id" SERIAL NOT NULL,
-    "record" TEXT,
+    "status" "Status" NOT NULL,
+    "value" TEXT,
+    "comment" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
     "todoId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
 
@@ -41,19 +53,31 @@ CREATE TABLE "Check" (
 -- CreateTable
 CREATE TABLE "Todo" (
     "id" SERIAL NOT NULL,
+    "remark" TEXT NOT NULL,
+    "referenceId" INTEGER NOT NULL,
+    "articleId" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
-    "definition" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
-    "criteria" TEXT NOT NULL,
-    "comments" TEXT NOT NULL,
+    "definition" TEXT,
+    "method" TEXT,
+    "location" TEXT,
+    "criteria" TEXT,
+    "record" TEXT,
+    "comments" TEXT,
+    "periodId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "userId" INTEGER NOT NULL,
-    "referenceId" INTEGER NOT NULL,
-    "methodId" INTEGER NOT NULL,
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Article" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -66,16 +90,11 @@ CREATE TABLE "Reference" (
 );
 
 -- CreateTable
-CREATE TABLE "Method" (
+CREATE TABLE "Periodicity" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "active" BOOLEAN NOT NULL DEFAULT true,
-    "hours" INTEGER,
-    "days" INTEGER,
-    "week" INTEGER,
-    "month" INTEGER,
 
-    CONSTRAINT "Method_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Periodicity_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -100,7 +119,10 @@ ALTER TABLE "Check" ADD CONSTRAINT "Check_userId_fkey" FOREIGN KEY ("userId") RE
 ALTER TABLE "Todo" ADD CONSTRAINT "Todo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Todo" ADD CONSTRAINT "Todo_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Todo" ADD CONSTRAINT "Todo_referenceId_fkey" FOREIGN KEY ("referenceId") REFERENCES "Reference"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Todo" ADD CONSTRAINT "Todo_methodId_fkey" FOREIGN KEY ("methodId") REFERENCES "Method"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Todo" ADD CONSTRAINT "Todo_periodId_fkey" FOREIGN KEY ("periodId") REFERENCES "Periodicity"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

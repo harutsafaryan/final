@@ -1,4 +1,5 @@
 
+export default function ({checksList}) {
     if (checksList.length === 0)
         return;
 

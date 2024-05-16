@@ -15,6 +15,7 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  active    Boolean  @default(true)
 
   password Password?
   notes    Note[]
@@ -42,11 +43,14 @@ model Note {
 }
 
 model Check {
-  id     Int     @id @default(autoincrement())
-  record String?
+  id      Int     @id @default(autoincrement())
+  status  Status
+  value   String?
+  comment String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  active    Boolean  @default(true)
 
   todo   Todo @relation(fields: [todoId], references: [id])
   todoId Int
@@ -58,11 +62,17 @@ model Check {
 model Todo {
   id Int @id @default(autoincrement())
 
-  title      String
-  definition String
-  location   String
-  criteria   String
-  comments   String
+  remark      String
+  referenceId Int
+  articleId   Int
+  title       String
+  definition  String?
+  method      String?
+  location    String?
+  criteria    String?
+  record      String?
+  comments    String?
+  periodId    Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -70,37 +80,41 @@ model Todo {
 
   checks Check[]
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
+  article   Article     @relation(fields: [articleId], references: [id])
+  reference Reference   @relation(fields: [referenceId], references: [id])
+  period    Periodicity @relation(fields: [periodId], references: [id])
+}
 
-  referenceId Int
-  reference   Reference @relation(fields: [referenceId], references: [id])
+model Article {
+  id   Int    @id @default(autoincrement())
+  name String
 
-  methodId Int
-  method   Method @relation(fields: [methodId], references: [id])
+  todos Todo[]
 }
 
 model Reference {
   id     Int     @id @default(autoincrement())
   name   String
   active Boolean @default(true)
-
-  todos Todo[]
+  todos  Todo[]
 }
 
-model Method {
-  id     Int     @id @default(autoincrement())
-  name   String
-  active Boolean @default(true)
-  hours  Int?
-  days   Int?
-  week   Int?
-  month  Int?
-
+model Periodicity {
+  id    Int    @id @default(autoincrement())
+  name  String
   todos Todo[]
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+enum Status {
+  PASSED
+  FAIL
+  SUCCESS
+  UNKNOWN
 }
