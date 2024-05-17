@@ -45,7 +45,8 @@ model Note {
 model Check {
   id      Int     @id @default(autoincrement())
   status  Status
-  value   String?
+  value   Decimal?
+  text    String?
   comment String?
 
   createdAt DateTime @default(now())
