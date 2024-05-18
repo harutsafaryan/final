@@ -44,7 +44,7 @@ model Note {
 
 model Check {
   id      Int     @id @default(autoincrement())
-  status  Status
+  status  Status @default(UNKNOWN)
   value   Decimal?
   text    String?
   comment String?
@@ -114,8 +114,8 @@ enum Role {
 }
 
 enum Status {
-  PASSED
-  FAIL
-  SUCCESS
   UNKNOWN
+  CHECKED
+  SUCCESS
+  FAIL
 }

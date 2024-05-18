@@ -14,7 +14,14 @@ export async function deleteTodo(id: Todo['id']) {
 }
 
 export async function getTodoById(id: Todo['id']) {
-    return await prisma.todo.findFirst({ where: { id } })
+    return await prisma.todo.findFirst({ 
+        where: { id }, 
+        include : {
+            article : true,
+            period : true,
+            reference : true
+        }
+    })
 }
 
 export async function createTodo({

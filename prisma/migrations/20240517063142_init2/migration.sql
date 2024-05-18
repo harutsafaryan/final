@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Check" ALTER COLUMN "value" SET DATA TYPE DECIMAL(65,30);

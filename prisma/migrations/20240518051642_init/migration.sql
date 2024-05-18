@@ -2,7 +2,7 @@
 CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
 -- CreateEnum
-CREATE TYPE "Status" AS ENUM ('PASSED', 'FAIL', 'SUCCESS', 'UNKNOWN');
+CREATE TYPE "Status" AS ENUM ('UNKNOWN', 'CHECKED', 'SUCCESS', 'FAIL');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -38,8 +38,9 @@ CREATE TABLE "Note" (
 -- CreateTable
 CREATE TABLE "Check" (
     "id" SERIAL NOT NULL,
-    "status" "Status" NOT NULL,
-    "value" TEXT,
+    "status" "Status" NOT NULL DEFAULT 'UNKNOWN',
+    "value" DECIMAL(65,30),
+    "text" TEXT,
     "comment" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
