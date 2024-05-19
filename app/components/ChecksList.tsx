@@ -1,10 +1,16 @@
+import { Link, redirect, useNavigate } from "@remix-run/react";
+import { classNames } from "~/utility/helper";
 
-export default function ({checksList}) {
+export default function ({ checksList }) {
     if (checksList.length === 0)
         return;
 
+    const isTododExist = checksList.filter(c => c?.todo).length > 0;
+    const navigate = useNavigate();
+
     return (
-        <div className="px-4 sm:px-6 lg:px-8">
+        <div className="px-2 sm:px-6 lg:px-1">
+            <p>{isTododExist ? 'yes' : 'no'}</p>
             <div className="sm:flex sm:items-center justify-center">
                 <h1 className="text-base font-semibold mt-2 leading-6 text-gray-900">A list of checks for date : </h1>
             </div>
@@ -15,29 +21,47 @@ export default function ({checksList}) {
                             <table className="min-w-full divide-y divide-gray-300">
                                 <thead className="bg-gray-50">
                                     <tr>
+                                        {
+                                            isTododExist &&
+                                            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                                Todo Title
+                                            </th>
+                                        }
                                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                                            Todo name
+                                            Status
+                                        </th>
+                                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                            Numeric value
                                         </th>
                                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            Record
+                                            Text value
                                         </th>
                                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            Time
+                                            Created At
                                         </th>
                                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                             Created By
                                         </th>
+                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                            Comment
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                                    {checksList.map((check : GetResult<{ id: number; record: string | null; createdAt: Date; updatedAt: Date; todoId: number; userId: number; }, unknown> & {}) => (
-                                        <tr key={check.id}>
-                                            <td className="whitespace-nowrap py-1 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                {check.todo.title}
-                                            </td>
-                                            <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">{check.record}</td>
-                                            <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">{new Date(check.createdAt).toLocaleTimeString()}</td>
-                                            <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">{check.user.name}</td>
+                                    {checksList.map((check: any) => (
+                                        <tr key={check.id}
+                                            onClick={() => navigate(`${check.id}`)}
+                                            className={classNames(`${check.status === 'SUCCESS' ? 'bg-green-200' : check.status === 'FAIL' ? 'bg-rose-200' : null}`,
+                                                'text-gray-900 hover:text-red-600'
+                                            )}
+                                        >
+                                            {isTododExist && <td className="whitespace-nowrap px-3 py-1 text-sm">{check.todo.title}</td>}
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.status}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.value}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.text}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm ">{new Date(check.createdAt).toLocaleString()}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.user.name}</td>
+                                            <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.comment}</td>
                                         </tr>
                                     ))}
                                 </tbody>

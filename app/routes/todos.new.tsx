@@ -12,8 +12,8 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     // const inputs = Object.fromEntries(formData);
 
-    const referenceId = Number(formData.get('referenceId'));
-    const methodId = Number(formData.get('methodId'));
+    const referenceId = formData.get('referenceId');
+    const methodId = formData.get('methodId');
     const title = formData.get('title');
     const definition = formData.get('definition');
     const location = formData.get('location');

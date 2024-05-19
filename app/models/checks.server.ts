@@ -1,9 +1,21 @@
-import { type User, type Check, type Todo, Prisma,  } from "@prisma/client";
+import { type User, type Check, type Todo, Prisma, } from "@prisma/client";
+import { title } from "process";
 import { prisma } from "~/db.server";
 import { getMonthIndex } from "~/utility/helper";
 
 export async function getChecks() {
-    return await prisma.check.findMany();
+    return await prisma.check.findMany({
+        select: {
+            id: true,
+            value: true,
+            text: true,
+            comment: true,
+            status: true,
+            createdAt: true,
+            user: { select: { name: true } },
+            todo: { select: { title: true } }
+        }
+    });
 }
 
 export async function deleteCheck(id: Check['id']) {
@@ -13,18 +25,29 @@ export async function deleteCheck(id: Check['id']) {
 export async function getCheckById(id: Check['id']) {
     return await prisma.check.findFirst({
         where: { id },
-        include: {
-            todo: true
-        }
-    })
+        select: {
+            id: true,
+            value: true,
+            text: true,
+            comment: true,
+            status: true,
+            createdAt: true,
+            user: { select: { name: true } },
+            todo: {select : {id: true}}
+            }
+        })
 }
 
 export async function getChecksByTodoId(todoId: Todo['id']) {
     return await prisma.check.findMany({
         where: { todoId },
-        include: {
-            todo: true,
-            user : true
+        select: {
+            value: true,
+            text: true,
+            comment: true,
+            status: true,
+            createdAt: true,
+            user: { select: { name: true } }
         }
     })
 }
@@ -33,14 +56,13 @@ export async function getChecksByTodoId(todoId: Todo['id']) {
 export async function createCheck({ status, value, text, comment, todoId, userId }: Pick<Check, 'status' | 'value' | 'text' | 'comment' | 'todoId' | 'userId'>) {
     const now = new Date();
 
-    await new Promise(res => setTimeout(res, 500));
     return await prisma.check.create({
         data: {
-            status, 
+            status,
             value,
-            text, 
-            comment, 
-            todoId, 
+            text,
+            comment,
+            todoId,
             userId
         }
     })
@@ -110,9 +132,9 @@ export async function getChecksByMonth(month: string) {
         },
         select: {
             id: true,
-            record : true,
+            record: true,
             createdAt: true,
-            user : true,
+            user: true,
             year: true,
             month: true,
             day: true,

@@ -7,13 +7,14 @@ import { getTodoById } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
 import { Prisma, Status } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
+import TodoInfo from "~/components/TodoInfo";
 
 const statuses = Object.keys(Status);
 type StatusKeys = keyof typeof Status;
 
 export async function loader({ params }: LoaderFunctionArgs) {
     invariant(params.todoId, "todoId not found");
-    const todoId = Number(params.todoId);
+    const todoId = params.todoId;
     const todo = await getTodoById(todoId);
     return json({ todo });
 }
@@ -23,11 +24,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const commentValue = formData.get('comment') as string;
     const textValue = formData.get('text') as string;
-    const decimalValue = formData.get('value') as string;
-    const todoId = parseInt(formData.get('todoId') as string);
+    const floatValue = formData.get('value') as string;
+    const todoId = formData.get('todoId') as string;
     const status = formData.get('status') as StatusKeys;
 
-    const value = decimalValue !== '' ? new Prisma.Decimal(decimalValue) : null;
+    const value = floatValue ? parseFloat(floatValue) : null;
     const text = textValue !== '' ? textValue : null;
     const comment = commentValue !== '' ? commentValue : null;
 
@@ -35,8 +36,6 @@ export async function action({ request }: ActionFunctionArgs) {
     await createCheck({ status, value, text, comment, todoId, userId });
     return redirect('/todos');
 }
-
-
 
 export default function TodoPage() {
     const { todo } = useLoaderData<typeof loader>();
@@ -53,23 +52,10 @@ export default function TodoPage() {
     console.log('textRef.current?.value: ', textRef.current?.value)
 
 
-    //                         periodId    Int
-
     return (
         <div>
-
             <Form method="POST">
-                {todo?.articleId && <p className="text-sm font-medium leading-6 text-gray-900">Article: {todo?.article.name}</p>}
-                {todo?.title && <p className="text-sm font-medium leading-6 text-gray-900">Title: {todo?.title}</p>}
-                {todo?.referenceId && <p className="text-sm font-medium leading-6 text-gray-900">Reference: {todo?.reference.name}</p>}
-                {todo?.definition && <p className="text-sm font-medium leading-6 text-gray-900">Definition: {todo?.definition}</p>}
-                {todo?.location && <p className="text-sm font-medium leading-6 text-gray-900">Location: {todo?.location}</p>}
-                {todo?.criteria && <p className="text-sm font-medium leading-6 text-gray-900">Criteria: {todo?.criteria}</p>}
-                {todo?.method && <p className="text-sm font-medium leading-6 text-gray-900">Method: {todo?.method}</p>}
-                {todo?.record && <p className="text-sm font-medium leading-6 text-gray-900">Record: {todo?.record}</p>}
-                {/* <p className="text-sm font-medium leading-6 text-gray-900">Created: {new Date(todo?.createdAt ?? 0).toLocaleDateString()}</p> */}
-                {todo?.comments && <p className="text-sm font-medium leading-6 text-gray-900">Comments: {todo?.comments}</p>}
-
+                <TodoInfo todo={todo} />
                 <input type="hidden" name="todoId" value={todo?.id}></input>
 
                 <label className="flex w-full flex-col gap-1">

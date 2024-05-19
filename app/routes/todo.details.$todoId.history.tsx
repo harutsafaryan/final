@@ -7,7 +7,7 @@ import { getTodoById } from "~/models/todos.server";
 
 export async function loader({ params }: LoaderFunctionArgs) {
     invariant(params.todoId, "todoId not found");
-    const todoId = Number(params.todoId);
+    const todoId = params.todoId;
     const checks = await getChecksByTodoId(todoId);
     return json({ checks });
 }

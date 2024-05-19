@@ -33,3 +33,7 @@ export function getMonthName(month: number) {
         default: return null
     }
 }
+
+export function classNames(...classes: Array<String>) {
+    return classes.filter(Boolean).join(' ')
+}

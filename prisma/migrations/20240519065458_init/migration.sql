@@ -6,7 +6,7 @@ CREATE TYPE "Status" AS ENUM ('UNKNOWN', 'CHECKED', 'SUCCESS', 'FAIL');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
@@ -20,7 +20,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Password" (
     "hash" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL
+    "userId" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -30,33 +30,34 @@ CREATE TABLE "Note" (
     "body" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Note_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Check" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'UNKNOWN',
-    "value" DECIMAL(65,30),
+    "value" DOUBLE PRECISION,
     "text" TEXT,
     "comment" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
-    "todoId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "todoId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Check_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Todo" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "remark" TEXT NOT NULL,
-    "referenceId" INTEGER NOT NULL,
-    "articleId" INTEGER NOT NULL,
+    "referenceId" TEXT NOT NULL,
+    "articleId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "definition" TEXT,
     "method" TEXT,
@@ -64,18 +65,17 @@ CREATE TABLE "Todo" (
     "criteria" TEXT,
     "record" TEXT,
     "comments" TEXT,
-    "periodId" INTEGER NOT NULL,
+    "periodId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
-    "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Article" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
@@ -83,7 +83,7 @@ CREATE TABLE "Article" (
 
 -- CreateTable
 CREATE TABLE "Reference" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
 
@@ -92,7 +92,7 @@ CREATE TABLE "Reference" (
 
 -- CreateTable
 CREATE TABLE "Periodicity" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Periodicity_pkey" PRIMARY KEY ("id")

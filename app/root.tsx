@@ -376,8 +376,8 @@ export default function App() {
 }
 
 
-export function ErrorBoundary() {
-  return (
-    <GenericErrorBoundary/>
-  )
-}
+// export function ErrorBoundary() {
+//   return (
+//     <GenericErrorBoundary/>
+//   )
+// }

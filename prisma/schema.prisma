@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   email String @unique
   name  String
   role  Role   @default(USER)
@@ -26,8 +26,8 @@ model User {
 model Password {
   hash String
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId Int  @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
 }
 
 model Note {
@@ -38,14 +38,14 @@ model Note {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId Int
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
 }
 
 model Check {
-  id      Int     @id @default(autoincrement())
-  status  Status @default(UNKNOWN)
-  value   Decimal?
+  id      String   @id @default(uuid())
+  status  Status   @default(UNKNOWN)
+  value   Float?
   text    String?
   comment String?
 
@@ -53,19 +53,17 @@ model Check {
   updatedAt DateTime @updatedAt
   active    Boolean  @default(true)
 
-  todo   Todo @relation(fields: [todoId], references: [id])
-  todoId Int
+  todo   Todo   @relation(fields: [todoId], references: [id])
+  todoId String
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id]) 
+  userId String
 }
 
 model Todo {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   remark      String
-  referenceId Int
-  articleId   Int
   title       String
   definition  String?
   method      String?
@@ -73,7 +71,11 @@ model Todo {
   criteria    String?
   record      String?
   comments    String?
-  periodId    Int
+  
+  userId      String
+  referenceId String
+  articleId   String
+  periodId    String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,7 +83,6 @@ model Todo {
 
   checks Check[]
 
-  userId    Int
   user      User        @relation(fields: [userId], references: [id])
   article   Article     @relation(fields: [articleId], references: [id])
   reference Reference   @relation(fields: [referenceId], references: [id])
@@ -89,21 +90,21 @@ model Todo {
 }
 
 model Article {
-  id   Int    @id @default(autoincrement())
+  id   String    @id @default(uuid())
   name String
 
   todos Todo[]
 }
 
 model Reference {
-  id     Int     @id @default(autoincrement())
+  id     String     @id @default(uuid())
   name   String
   active Boolean @default(true)
   todos  Todo[]
 }
 
 model Periodicity {
-  id    Int    @id @default(autoincrement())
+  id    String    @id @default(uuid())
   name  String
   todos Todo[]
 }
