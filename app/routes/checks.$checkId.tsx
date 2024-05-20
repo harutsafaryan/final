@@ -6,6 +6,7 @@ import TodoInfo from "~/components/TodoInfo";
 import { deleteCheck, getCheckById } from "~/models/checks.server";
 import { getTodoById } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
+import { redirectWithSuccess, redirectWithToast } from "remix-toast";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
     const userId = await requireUserId(request);
@@ -29,7 +30,7 @@ export async function action({params, request}: ActionFunctionArgs) {
     invariant(checkId, 'check id is rquired')
     await deleteCheck(checkId);
 
-    return redirect('/checks');
+    return redirectWithToast('/checks', { message: "You are succesfully delete the check!", type: "info" });
 }
 
 export default function CheckPage() {

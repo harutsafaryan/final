@@ -6,8 +6,8 @@ import { createCheck } from "~/models/checks.server";
 import { getTodoById } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
 import { Prisma, Status } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime";
 import TodoInfo from "~/components/TodoInfo";
+import { redirectWithSuccess, redirectWithToast } from "remix-toast";
 
 const statuses = Object.keys(Status);
 type StatusKeys = keyof typeof Status;
@@ -33,8 +33,8 @@ export async function action({ request }: ActionFunctionArgs) {
     const comment = commentValue !== '' ? commentValue : null;
 
     const userId = await requireUserId(request);
-    await createCheck({ status, value, text, comment, todoId, userId });
-    return redirect('/todos');
+    const check = await createCheck({ status, value, text, comment, todoId, userId });
+    return redirectWithToast('/todos', {message: 'You succesfully create check', type : 'info'});
 }
 
 export default function TodoPage() {

@@ -1,5 +1,5 @@
 import { Dialog, Transition, Menu } from "@headlessui/react";
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -34,6 +34,9 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { GenericErrorBoundary } from "./components/ErrorBoundary";
+import { getToast } from "remix-toast";
+import { ToastContainer, toast as notify } from "react-toastify";
+import toastStyles from "react-toastify/dist/ReactToastify.css";
 
 const navigation = [
   { name: 'Dashboard', link: '#', icon: HomeIcon, current: true },
@@ -62,16 +65,37 @@ function classNames(...classes: Array<String>) {
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
+  { rel: "stylesheet", href: toastStyles },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({ user: await getUser(request) });
+  const { toast, headers } = await getToast(request);
+
+  return json({ user: await getUser(request), toast, headers });
 };
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { user } = useLoaderData<typeof loader>();
+  const { user, toast } = useLoaderData<typeof loader>();
+
+  console.log('toast :', toast)
+
+  useEffect(() => {
+    if (toast?.type === "error") {
+      notify.error(toast.message);
+    }
+    if (toast?.type === "success") {
+      notify.success(toast.message);
+    }
+    if (toast?.type === "info") {
+      notify.info(toast.message);
+    }
+    if (toast?.type === "warning") {
+      notify.warning(toast.message)
+    }
+
+  }, [toast]);
 
   return (
     <html lang="en" className="h-full">
@@ -370,6 +394,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <ToastContainer />
       </body>
     </html>
   );

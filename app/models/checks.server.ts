@@ -5,6 +5,9 @@ import { getMonthIndex } from "~/utility/helper";
 
 export async function getChecks() {
     return await prisma.check.findMany({
+        where : {
+            active : true
+        },
         select: {
             id: true,
             value: true,
@@ -19,12 +22,19 @@ export async function getChecks() {
 }
 
 export async function deleteCheck(id: Check['id']) {
-    return await prisma.check.delete({ where: { id } })
+    // return await prisma.check.delete({ where: { id } })
+    return await prisma.check.update({
+        where: { id },
+        data: { active: false }
+    })
 }
 
 export async function getCheckById(id: Check['id']) {
     return await prisma.check.findFirst({
-        where: { id },
+        where: {
+            id,
+            active: true
+        },
         select: {
             id: true,
             value: true,
@@ -33,9 +43,9 @@ export async function getCheckById(id: Check['id']) {
             status: true,
             createdAt: true,
             user: { select: { name: true } },
-            todo: {select : {id: true}}
-            }
-        })
+            todo: { select: { id: true } }
+        }
+    })
 }
 
 export async function getChecksByTodoId(todoId: Todo['id']) {

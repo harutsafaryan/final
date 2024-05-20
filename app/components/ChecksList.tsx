@@ -3,14 +3,17 @@ import { classNames } from "~/utility/helper";
 
 export default function ({ checksList }) {
     if (checksList.length === 0)
-        return;
+        return (
+            <div className="px-2 sm:px-6 lg:px-1">
+                <h1 className="text-base font-semibold mt-2 leading-6 text-gray-900">There is no any check!</h1>
+            </div>
+        )
 
     const isTododExist = checksList.filter(c => c?.todo).length > 0;
     const navigate = useNavigate();
 
     return (
         <div className="px-2 sm:px-6 lg:px-1">
-            <p>{isTododExist ? 'yes' : 'no'}</p>
             <div className="sm:flex sm:items-center justify-center">
                 <h1 className="text-base font-semibold mt-2 leading-6 text-gray-900">A list of checks for date : </h1>
             </div>

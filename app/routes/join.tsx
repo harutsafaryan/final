@@ -33,14 +33,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (typeof name !== "string" || name.length === 0 || name.indexOf(' ') === -1) {
     return json(
-      { errors: { email: null,  name: "Name is invalid", password: null } },
+      { errors: { email: null, name: "Name is invalid", password: null } },
       { status: 400 },
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
     return json(
-      { errors: { email: null, name: null,  password: "Password is required" } },
+      { errors: { email: null, name: null, password: "Password is required" } },
       { status: 400 },
     );
   }
@@ -58,7 +58,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       {
         errors: {
           email: "A user already exists with this email",
-          name : null,
+          name: null,
           password: null,
         },
       },
@@ -66,7 +66,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const user = await createUser(email, name,  password);
+  const user = await createUser(email, name, password);
 
   return createUserSession({
     redirectTo,
@@ -107,7 +107,7 @@ export default function Join() {
             >
               Email address
             </label>
-            <div className="mt-1">
+            <div className="mt-1 flex">
               <input
                 ref={emailRef}
                 id="email"
@@ -121,6 +121,9 @@ export default function Join() {
                 aria-describedby="email-error"
                 className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
               />
+              <span className="inline-flex items-center rounded-l-md  px-1 text-gray-700 sm:text-lg">
+                @profal.am
+              </span>
               {actionData?.errors?.email ? (
                 <div className="pt-1 text-red-700" id="email-error">
                   {actionData.errors.email}
