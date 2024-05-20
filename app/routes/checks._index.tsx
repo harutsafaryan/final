@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node"
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import ChecksList from "~/components/ChecksList";
-import { generateChecks, getChecks } from "~/models/checks.server";
+import { getChecks } from "~/models/checks.server";
 import { requireUser, requireUserId } from "~/session.server";
 
 export async function loader({request} : LoaderFunctionArgs) {

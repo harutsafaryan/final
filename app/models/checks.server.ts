@@ -78,17 +78,6 @@ export async function createCheck({ status, value, text, comment, todoId, userId
     })
 }
 
-export async function generateChecks() {
-    const random = Math.random() * 10000;
-    const text = random.toString();
-    await prisma.check.create({
-        data: {
-            todoId: 1,
-            userId: 1
-        }
-    })
-}
-
 export async function lastAction() {
     return await prisma.check.groupBy({
         by: ['todoId'],
@@ -142,7 +131,6 @@ export async function getChecksByMonth(month: string) {
         },
         select: {
             id: true,
-            record: true,
             createdAt: true,
             user: true,
             year: true,

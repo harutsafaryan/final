@@ -30,7 +30,7 @@ export function getMonthName(month: number) {
         case 9: return 'October'
         case 10: return 'November'
         case 11: return 'December'
-        default: return null
+        default: return ''
     }
 }
 
