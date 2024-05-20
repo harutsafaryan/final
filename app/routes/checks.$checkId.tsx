@@ -14,16 +14,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
     const checkId = params.checkId
     const check = await getCheckById(checkId);
-    const todo = await getTodoById(check?.todo.id)
 
     if (!check) {
         throw new Response("Not Found", { status: 404 });
     }
+    const todo = await getTodoById(check.todo.id)
 
     return json({ check, todo });
 }
 
-export async function action({params, request}: ActionFunctionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
     const userId = await requireUserId(request);
 
     const checkId = params.checkId;
