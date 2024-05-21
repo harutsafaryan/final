@@ -1,4 +1,7 @@
-export default function TodoInfo({ todo }) {
+/* eslint-disable react/jsx-no-leaked-render */
+import type { Todo } from "@prisma/client"
+
+export default function TodoInfo( todo : Todo) {
     return (
         <div>
             {

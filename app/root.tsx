@@ -1,5 +1,19 @@
 import { Dialog, Transition, Menu } from "@headlessui/react";
-import { Fragment, useEffect, useState } from 'react'
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import {
+  Bars3Icon,
+  CalendarIcon,
+  ChartPieIcon,
+  Cog6ToothIcon,
+  DocumentDuplicateIcon,
+  FolderIcon,
+  HomeIcon,
+  UsersIcon,
+  XMarkIcon,
+  ClipboardDocumentCheckIcon,
+  CogIcon,
+  Square3Stack3DIcon
+} from '@heroicons/react/24/outline'
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -13,30 +27,14 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { Fragment, useEffect, useState } from 'react'
+import { ToastContainer, toast as notify } from "react-toastify";
+import toastStyles from "react-toastify/dist/ReactToastify.css";
+import { getToast } from "remix-toast";
 
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
 
-import {
-  Bars3Icon,
-  BellIcon,
-  CalendarIcon,
-  ChartPieIcon,
-  Cog6ToothIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
-  XMarkIcon,
-  ClipboardDocumentCheckIcon,
-  CogIcon,
-  Square3Stack3DIcon
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { GenericErrorBoundary } from "./components/ErrorBoundary";
-import { getToast } from "remix-toast";
-import { ToastContainer, toast as notify } from "react-toastify";
-import toastStyles from "react-toastify/dist/ReactToastify.css";
 
 const navigation = [
   { name: 'Dashboard', link: '#', icon: HomeIcon, current: true },
@@ -59,7 +57,7 @@ const userNavigation = [
   { name: 'Sign out', link: '/logout' },
 ]
 
-function classNames(...classes: Array<String>) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -158,9 +156,9 @@ export default function App() {
                         />
                       </div>
                       <nav className="flex flex-1 flex-col">
-                        <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                        <ul  className="flex flex-1 flex-col gap-y-7">
                           <li>
-                            <ul role="list" className="-mx-2 space-y-1">
+                            <ul className="-mx-2 space-y-1">
                               {navigation.map((item) => (
                                 <li key={item.name}>
                                   <Link to={item.link}
@@ -186,7 +184,7 @@ export default function App() {
                           </li>
                           <li>
                             <div className="text-xs font-semibold leading-6 text-indigo-200">Your teams</div>
-                            <ul role="list" className="-mx-2 mt-2 space-y-1">
+                            <ul className="-mx-2 mt-2 space-y-1">
                               {teams.map((team) => (
                                 <li key={team.name}>
                                   <a
@@ -240,9 +238,9 @@ export default function App() {
                 />
               </div>
               <nav className="flex flex-1 flex-col">
-                <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                <ul className="flex flex-1 flex-col gap-y-7">
                   <li>
-                    <ul role="list" className="-mx-2 space-y-1">
+                    <ul className="-mx-2 space-y-1">
                       {navigation.map((item) => (
                         <li key={item.name}>
                           <a
@@ -269,7 +267,7 @@ export default function App() {
                   </li>
                   <li>
                     <div className="text-xs font-semibold leading-6 text-indigo-200">Your teams</div>
-                    <ul role="list" className="-mx-2 mt-2 space-y-1">
+                    <ul  className="-mx-2 mt-2 space-y-1">
                       {teams.map((team) => (
                         <li key={team.name}>
                           <a

@@ -2,7 +2,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
 
-import MonthChange2 from "~/components/MonthChange2";
+import MonthChange2 from "~/components/MonthChange";
 import { getChecksByMonth, } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 

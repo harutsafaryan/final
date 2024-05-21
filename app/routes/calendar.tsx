@@ -5,7 +5,7 @@ import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 import ChecksList from "~/components/ChecksList";
-import MonthChange2 from "~/components/MonthChange2";
+import MonthChange from "~/components/MonthChange";
 import { getChecksByMonth } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 
@@ -53,7 +53,7 @@ export default function Calendar() {
 
     return (
         <div>
-            <MonthChange2 />
+            <MonthChange />
             <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
                 <div className="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
                     <div className="bg-white py-2">

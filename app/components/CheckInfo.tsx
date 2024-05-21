@@ -1,6 +1,7 @@
 import { Status } from "@prisma/client"
+import type { Check } from "@prisma/client"
 
-export default function CheckInfo({ check }) {
+export default function CheckInfo( check  : Check) {
     const textColor = check.status === Status.CHECKED
         ? 'bg-yellow-300'
         : check.status === Status.SUCCESS
@@ -19,25 +20,22 @@ export default function CheckInfo({ check }) {
                 <p className={textColor}>{check.status}</p>
             </div>
             {
-                check?.value &&
-                <div className="flex text-sm font-medium leading-6 text-gray-900">
+                check?.value ? <div className="flex text-sm font-medium leading-6 text-gray-900">
                     <p className="italic mr-4 w-16 text-right">Value:</p>
                     <p>{check.value}</p>
-                </div>
+                </div> : null
             }
             {
-                check?.text &&
-                <div className="flex text-sm font-medium leading-6 text-gray-900">
+                check?.text ? <div className="flex text-sm font-medium leading-6 text-gray-900">
                     <p className="italic mr-4 w-16 text-right">Text:</p>
                     <p>{check.text}</p>
-                </div>
+                </div> : null
             }
             {
-                check?.comment &&
-                <div className="flex text-sm font-medium leading-6 text-gray-900">
+                check?.comment ? <div className="flex text-sm font-medium leading-6 text-gray-900">
                     <p className="italic mr-4 w-16 text-right">Comment:</p>
                     <p>{check.comment}</p>
-                </div>
+                </div> : null
             }
         </div>
     )

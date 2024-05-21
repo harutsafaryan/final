@@ -1,7 +1,10 @@
-import { Link, redirect, useNavigate } from "@remix-run/react";
+import type { Check } from "@prisma/client";
+import { useNavigate } from "@remix-run/react";
+
 import { classNames } from "~/utility/helper";
 
-export default function ({ checksList }) {
+export default function CheckList(checksList: Check[]) {
+    const navigate = useNavigate();
     if (checksList.length === 0)
         return (
             <div className="px-2 sm:px-6 lg:px-1">
@@ -10,7 +13,6 @@ export default function ({ checksList }) {
         )
 
     const isTododExist = checksList.filter(c => c?.todo).length > 0;
-    const navigate = useNavigate();
 
     return (
         <div className="px-2 sm:px-6 lg:px-1">
@@ -25,10 +27,9 @@ export default function ({ checksList }) {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         {
-                                            isTododExist &&
-                                            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                            isTododExist ? <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                                                 Todo Title
-                                            </th>
+                                            </th> : null
                                         }
                                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                                             Status
@@ -51,14 +52,14 @@ export default function ({ checksList }) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                                    {checksList.map((check: any) => (
+                                    {checksList.map((check: Check) => (
                                         <tr key={check.id}
                                             onClick={() => navigate(`${check.id}`)}
                                             className={classNames(`${check.status === 'SUCCESS' ? 'bg-green-200' : check.status === 'FAIL' ? 'bg-rose-200' : null}`,
                                                 'text-gray-900 hover:text-red-600'
                                             )}
                                         >
-                                            {isTododExist && <td className="whitespace-nowrap px-3 py-1 text-sm">{check.todo.title}</td>}
+                                            {isTododExist ? <td className="whitespace-nowrap px-3 py-1 text-sm">{check.todo.title}</td> : null}
                                             <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.status}</td>
                                             <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.value}</td>
                                             <td className="whitespace-nowrap px-3 py-1 text-sm ">{check.text}</td>
