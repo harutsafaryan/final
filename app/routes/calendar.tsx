@@ -1,11 +1,12 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { Form, Link, Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
 import { url } from "inspector";
+
+import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
+
 import ChecksList from "~/components/ChecksList";
-import MonthChange from "~/components/MonthChange";
 import MonthChange2 from "~/components/MonthChange2";
-import { getChecksByDateInterval, getChecksByMonth, groupCheckByDate } from "~/models/checks.server";
+import { getChecksByMonth } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -98,8 +99,7 @@ export default function Calendar() {
                                 >
                                     {day.date.getDate()}
                                 </p>
-                                {day.checks.length > 0 && (
-                                    <ol className="mt-0">
+                                {day.checks.length > 0 ? <ol className="mt-0">
                                         {day.checks.slice(0, 2).map((check) => (
                                             <li key={check.id}>
                                                 <p className="flex-auto truncate font-medium text-xs text-gray-900 group-hover:text-indigo-600">
@@ -107,9 +107,8 @@ export default function Calendar() {
                                                 </p>
                                             </li>
                                         ))}
-                                        {day.checks.length > 2 && <li className="font-medium text-xs text-gray-500">+ {day.checks.length - 2} more</li>}
-                                    </ol>
-                                )}
+                                        {day.checks.length > 2 ? <li className="font-medium text-xs text-gray-500">+ {day.checks.length - 2} more</li> : null}
+                                    </ol> : null}
                             </div>
                         ))}
                     </div>
@@ -177,6 +176,6 @@ function getDays(month: string | null, year: number, checks: []) {
     return dates;
 }
 
-function classNames(...classes: Array<String>) {
+function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }

@@ -1,10 +1,9 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { Form, Link, useLoaderData, useSearchParams } from "@remix-run/react";
-import { url } from "inspector";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
-import MonthChange from "~/components/MonthChange";
+
 import MonthChange2 from "~/components/MonthChange2";
-import { getChecksByDateInterval, getChecksByMonth, groupCheckByDate } from "~/models/checks.server";
+import { getChecksByMonth, } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -93,8 +92,7 @@ export default function Test() {
                                 >
                                     {day.date.getDate()}
                                 </time>
-                                {day.checks.length > 0 && (
-                                    <ol className="mt-1">
+                                {day.checks.length > 0 ? <ol className="mt-1">
                                         {day.checks.slice(0, 2).map((check) => (
                                             <li key={check.id}>
                                                 <div className="group flex">
@@ -104,9 +102,8 @@ export default function Test() {
                                                 </div>
                                             </li>
                                         ))}
-                                        {day.checks.length > 2 && <li className="text-gray-500">+ {day.checks.length - 2} more</li>}
-                                    </ol>
-                                )}
+                                        {day.checks.length > 2 ? <li className="text-gray-500">+ {day.checks.length - 2} more</li> : null}
+                                    </ol> : null}
                             </div>
                         ))}
                     </div>
@@ -171,6 +168,6 @@ function getDays(month: string | null, year : number, checks: []) {
     return dates;
 }
 
-function classNames(...classes: Array<String>) {
+function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }

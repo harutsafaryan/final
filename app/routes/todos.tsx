@@ -1,10 +1,10 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, Link, Outlet, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
-import { getTodos } from "~/models/todos.server";
-import { checkCount, createCheck, lastAction } from "~/models/checks.server";
-import { requireUserId } from "~/session.server";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
+
 import TodoItem from "~/components/TodoItem";
-import TodoList from "~/components/TodoList";
+import { checkCount, createCheck, lastAction } from "~/models/checks.server";
+import { getTodos } from "~/models/todos.server";
+import { requireUserId } from "~/session.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
     await requireUserId(request);
@@ -17,11 +17,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
-    let { todoId, record } = Object.fromEntries(formData);
-    todoId = Number(todoId);
+    const todoId = formData.get('todoId') as string;
 
     const userId = await requireUserId(request);
-    const check = await createCheck({ record, todoId, userId });
+    await createCheck({ todoId, userId });
 
     return null;
 }
@@ -48,7 +47,7 @@ export default function Todos() {
                     </Link>
                 ))}
             </ul>
-            <Outlet/>
+            <Outlet />
         </div>
     )
 }

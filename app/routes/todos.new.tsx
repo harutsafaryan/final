@@ -1,6 +1,7 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+
 import { getReferences } from "~/models/reference.server";
 import { createTodo } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
@@ -49,7 +50,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (typeof comments !== "string" || comments.length === 0)
         errors.comments = "Comments is required";
 
-    for (let key in errors) {
+    for (const key in errors) {
         return json(
             { errors },
             { status: 400 },

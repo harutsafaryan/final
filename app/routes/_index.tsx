@@ -1,6 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { createCheck } from "~/models/checks.server";
 
 import { useOptionalUser } from "~/utils";
 

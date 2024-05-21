@@ -1,13 +1,15 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, Link, Outlet, useLoaderData, useLocation, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
+import { Status } from "@prisma/client";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { Form, Outlet, useLoaderData, useLocation, useNavigate } from "@remix-run/react";
 import { useRef, useState } from "react";
+import { redirectWithToast } from "remix-toast";
 import invariant from "tiny-invariant";
+
+import TodoInfo from "~/components/TodoInfo";
 import { createCheck } from "~/models/checks.server";
 import { getTodoById } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
-import { Prisma, Status } from "@prisma/client";
-import TodoInfo from "~/components/TodoInfo";
-import { redirectWithSuccess, redirectWithToast } from "remix-toast";
+
 
 const statuses = Object.keys(Status);
 type StatusKeys = keyof typeof Status;

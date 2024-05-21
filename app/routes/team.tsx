@@ -1,5 +1,6 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
-import { Form, useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
+
 import { deleteUserById, getUsers } from "~/models/user.server"
 import { requireUserId } from "~/session.server";
 
@@ -9,10 +10,10 @@ export async function loader() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const userId = await requireUserId(request);
+  await requireUserId(request);
 
   const formData = await request.formData();
-  const userIdForDelete = Number(formData.get("id"));
+  const userIdForDelete =formData.get("id") as string;
   return await deleteUserById(userIdForDelete);
 }
 

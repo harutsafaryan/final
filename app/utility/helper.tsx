@@ -34,6 +34,6 @@ export function getMonthName(month: number) {
     }
 }
 
-export function classNames(...classes: Array<String>) {
+export function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
