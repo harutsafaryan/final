@@ -1,6 +1,8 @@
-import type { Todo } from "@prisma/client"
+import type { Reference, Todo } from "@prisma/client"
 
-export default function TodoItem( {todo} : {todo : Todo}) {
+type A = Todo & { reference : Reference}
+
+export default function TodoItem( todo : A) {
 
     return (
         <div className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow-lg border-2 border-sky-800">

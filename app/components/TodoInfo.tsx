@@ -1,7 +1,9 @@
 /* eslint-disable react/jsx-no-leaked-render */
-import type { Todo } from "@prisma/client"
+import type { Article, Reference, Todo } from "@prisma/client"
 
-export default function TodoInfo( todo : Todo) {
+type A = Todo & { article: Article, reference : Reference}
+
+export default function TodoInfo( todo : A) {
     return (
         <div>
             {

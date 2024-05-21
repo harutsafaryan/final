@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { Status } from "@prisma/client";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { Form, Outlet, useLoaderData, useLocation, useNavigate } from "@remix-run/react";
@@ -35,14 +36,12 @@ export async function action({ request }: ActionFunctionArgs) {
     const comment = commentValue !== '' ? commentValue : null;
 
     const userId = await requireUserId(request);
-    const check = await createCheck({ status, value, text, comment, todoId, userId });
+    await createCheck({ status, value, text, comment, todoId, userId });
     return redirectWithToast('/todos', {message: 'You succesfully create check', type : 'info'});
 }
 
 export default function TodoPage() {
     const { todo } = useLoaderData<typeof loader>();
-    const [value, setValue] = useState("");
-    const [showHistory, setShowHistory] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 

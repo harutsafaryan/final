@@ -1,3 +1,4 @@
+import type { Check } from "@prisma/client";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
@@ -6,10 +7,11 @@ import MonthChange2 from "~/components/MonthChange";
 import { getChecksByMonth, } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 
+
 export async function loader({ request }: LoaderFunctionArgs) {
 
     const url = new URL(request.url);
-    const month = url.searchParams.get('month');
+    const month = url.searchParams.get('month') ?? '';
     const checks = await getChecksByMonth(month);
     return json(checks);
 }
@@ -115,7 +117,7 @@ export default function Test() {
 
 
 
-function getDays(month: string | null, year : number, checks: []) {
+function getDays(month: string | null, year : number, checks: Check[]) {
     const today = new Date();
     const todayMonth = today.getMonth();
     const todayYear = today.getFullYear();

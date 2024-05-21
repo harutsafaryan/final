@@ -1,9 +1,11 @@
-import type { Check } from "@prisma/client";
+import type { Check, Todo, User } from "@prisma/client";
 import { useNavigate } from "@remix-run/react";
 
 import { classNames } from "~/utility/helper";
 
-export default function CheckList(checksList: Check[]) {
+type A = Check & { todo: Todo, user : User,  }
+
+export default function CheckList(checksList: A[]) {
     const navigate = useNavigate();
     if (checksList.length === 0)
         return (
@@ -52,7 +54,7 @@ export default function CheckList(checksList: Check[]) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                                    {checksList.map((check: Check) => (
+                                    {checksList.map((check: A) => (
                                         <tr key={check.id}
                                             onClick={() => navigate(`${check.id}`)}
                                             className={classNames(`${check.status === 'SUCCESS' ? 'bg-green-200' : check.status === 'FAIL' ? 'bg-rose-200' : null}`,

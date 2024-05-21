@@ -1,5 +1,6 @@
-import { type User, type Check, type Todo, Prisma, } from "@prisma/client";
-import { title } from "process";
+
+import type { Check, Todo } from "@prisma/client";
+
 import { prisma } from "~/db.server";
 import { getMonthIndex } from "~/utility/helper";
 
@@ -64,7 +65,6 @@ export async function getChecksByTodoId(todoId: Todo['id']) {
 //status, value, text, comment, record, todoId, userId
 
 export async function createCheck({ status, value, text, comment, todoId, userId }: Pick<Check, 'status' | 'value' | 'text' | 'comment' | 'todoId' | 'userId'>) {
-    const now = new Date();
 
     return await prisma.check.create({
         data: {
@@ -99,7 +99,7 @@ export async function groupCheckByDate() {
     })
 }
 
-export async function groupChecks(date: Date) {
+export async function groupChecks() {
     return await prisma.check.groupBy({
         by: ['date'],
         _count: { date: true }
