@@ -1,5 +1,6 @@
+import type { Todo } from "@prisma/client"
 
-export default function TodoItem({ todo }) {
+export default function TodoItem( {todo} : {todo : Todo}) {
 
     return (
         <div className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow-lg border-2 border-sky-800">
