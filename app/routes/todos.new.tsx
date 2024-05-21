@@ -11,7 +11,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const formData = await request.formData();
     const referenceId = formData.get('referenceId') as string;
-    const methodId = formData.get('methodId') as string;
+    const method = formData.get('method') as string;
     const title = formData.get('title') as string;
     const definition = formData.get('definition') as string;
     const location = formData.get('location') as string;
@@ -57,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
         );
     }
 
-    await createTodo({ title, definition, location, criteria, comments, methodId, referenceId, userId })
+    await createTodo({ title, definition, location, criteria, comments, method, referenceId, userId })
     return redirect('/todos');
 }
 
@@ -99,7 +99,7 @@ export default function NewTodoPage() {
                         <select name="referenceId"
                             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
                         >
-                            {references.map(reference => (<option value={reference.id}>{reference.name}</option>))}
+                            {references.map(reference => (<option key={reference.id} value={reference.id}>{reference.name}</option>))}
                         </select>
                     </label>
                     {/* title */}

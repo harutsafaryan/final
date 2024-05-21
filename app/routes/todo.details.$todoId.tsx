@@ -2,7 +2,7 @@
 import { Status } from "@prisma/client";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { Form, Outlet, useLoaderData, useLocation, useNavigate } from "@remix-run/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { redirectWithToast } from "remix-toast";
 import invariant from "tiny-invariant";
 

@@ -1,5 +1,4 @@
-import { url } from "inspector";
-
+import type { Check, Todo } from "@prisma/client";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
@@ -9,19 +8,22 @@ import MonthChange from "~/components/MonthChange";
 import { getChecksByMonth } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 
+
+type A = Check & { todo : Todo, day : number}
+
 export async function loader({ request }: LoaderFunctionArgs) {
 
     const url = new URL(request.url);
     const month = url.searchParams.get('month') ?? "" ;
     const checks = await getChecksByMonth(month);
-    return json(checks);
+    return json({checks});
 }
 
 export default function Calendar() {
 
     const [selected, setSelected] = useState(new Date(0));
     const [searchParams, setSearchParams] = useSearchParams();
-    const checks = useLoaderData<typeof loader>();
+    const {checks} = useLoaderData<typeof loader>();
 
     const month = searchParams.get('month');
     const year = searchParams.get('year');
@@ -47,7 +49,7 @@ export default function Calendar() {
             })
         }
 
-    }, [searchParams]);
+    }, [searchParams, setSearchParams]);
 
     console.log('selected: ', selected);
 
@@ -125,10 +127,9 @@ export default function Calendar() {
 
 
 
-function getDays(month: string | null, year: number, checks: []) {
+function getDays(month: string | null, year: number, checks : A[]) {
     const today = new Date();
     const todayMonth = today.getMonth();
-    const todayYear = today.getFullYear();
     const todayDay = today.getDate();
 
     let monthIndex;

@@ -1,4 +1,5 @@
-import type { User, Reference } from "@prisma/client";
+import type { Reference } from "@prisma/client";
+
 import { prisma } from "~/db.server";
 
 export async function getReferences() {

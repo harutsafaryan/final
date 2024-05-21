@@ -1,8 +1,8 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
+import React from "react";
 
 import { deleteUserById, getUsers } from "~/models/user.server"
-import type { User } from "~/models/user.server";
 import { requireUserId } from "~/session.server";
 
 export async function loader() {
@@ -23,13 +23,19 @@ export default function Team() {
 
   return (
     <ul className="divide-y divide-gray-100">
-      {users.map(user => <Member user={user} />)}
+      {users.map(user => <Member key={user.id} user={user} />)}
     </ul>
   )
 }
 
+interface MemberProps {
+  id : string;
+  name : string;
+  email : string;
+  role : string
+} 
 
-export function Member({ user }: User) {
+const Member : React.FC<{user :MemberProps }> =  ({ user }) => {
   const fetcher = useFetcher();
   const isDeleting = fetcher.state !== "idle";
 
@@ -53,18 +59,6 @@ export function Member({ user }: User) {
       </fetcher.Form>
       <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
         <p className="text-sm leading-6 text-gray-900">{user.role}</p>
-        {/* {user.lastSeen ? (
-          <p className="mt-1 text-xs leading-5 text-gray-500">
-            Last seen <time dateTime={user.lastSeenDateTime}>{user.lastSeen}</time>
-          </p>
-        ) : (
-          <div className="mt-1 flex items-center gap-x-1.5">
-            <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            </div>
-            <p className="text-xs leading-5 text-gray-500">Online</p>
-          </div>
-        )} */}
       </div>
     </li>
   )

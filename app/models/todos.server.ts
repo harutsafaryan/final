@@ -31,20 +31,24 @@ export async function createTodo({
     location,
     criteria,
     comments,
-    methodId,
+    method,
     referenceId,
     userId
-}: Pick<Todo, 'title' | 'definition' | 'location' | 'criteria' | 'comments' | 'methodId' | 'referenceId' | 'userId'>) {
+}: Pick<Todo, 'title' | 'definition' | 'location' | 'criteria' | 'comments' | 'method' | 'referenceId' | 'userId'>) {
     return await prisma.todo.create({
         data: {
+            remark : '',
             title,
             definition,
+            method,
             location,
             criteria,
+            record : '',
             comments,
-            methodId,
             referenceId,
-            userId
+            userId,
+            articleId: '',
+            periodId: ''
         }
     })
 }

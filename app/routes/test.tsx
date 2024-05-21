@@ -120,7 +120,6 @@ export default function Test() {
 function getDays(month: string | null, year : number, checks: Check[]) {
     const today = new Date();
     const todayMonth = today.getMonth();
-    const todayYear = today.getFullYear();
     const todayDay = today.getDate();
 
     let monthIndex;

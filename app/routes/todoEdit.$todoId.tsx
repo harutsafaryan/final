@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import { getTodoById } from "~/models/todos.server";
 
 export async function loader({params} : LoaderFunctionArgs) {
-    const todoId = Number(params.todoId);
+    const todoId = params.todoId as string;
     const todo = await getTodoById(todoId);
     return json({todo});
 }

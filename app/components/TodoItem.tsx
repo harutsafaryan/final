@@ -1,8 +1,21 @@
-import type { Reference, Todo } from "@prisma/client"
+// import type { Reference, Todo } from "@prisma/client"
 
-type A = Todo & { reference : Reference}
+// type A = Todo & { reference: Reference }
 
-export default function TodoItem( todo : A) {
+import React from 'react'
+
+
+interface TodoProps {
+    title : string;
+    definition : string | null;
+    location : string | null;
+    criteria : string | null;
+    reference: {
+      name: string;
+  }
+}
+
+const TodoItem: React.FC<{ todo: TodoProps }> = ( {todo} ) => {
 
     return (
         <div className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow-lg border-2 border-sky-800">
@@ -23,3 +36,5 @@ export default function TodoItem( todo : A) {
         </div>
     )
 }
+
+export default TodoItem
