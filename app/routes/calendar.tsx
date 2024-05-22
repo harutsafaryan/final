@@ -1,15 +1,31 @@
-import type { Check, Todo } from "@prisma/client";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
-import ChecksList from "~/components/ChecksList";
+import CheckList from "~/components/ChecksList";
 import MonthChange from "~/components/MonthChange";
 import { getChecksByMonth } from "~/models/checks.server";
 import { getMonthIndex, getMonthName } from "~/utility/helper";
 
 
-type A = Check & { todo : Todo, day : number}
+// type A = Check & { todo : Todo, day : number}
+interface Check {
+    id : string;
+    status : string;
+    value : number;
+    text : number;
+    createdAt : string
+    comment : string;
+    year : number;
+    month : number
+    day : number;
+    todo: {
+        title: string;
+    }
+    user : {
+        name : string
+    }
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
 
@@ -84,7 +100,8 @@ export default function Calendar() {
                     <div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
                         {days.map((day) => (
                             <div
-                                onClick={() => setSelected(day.date)}
+                                onClick={() => setSelected(day.date)} 
+                                aria-hidden="true"
                                 key={day.date.toString()}
                                 className={classNames(
                                     day.isCurrentMonth ? 'bg-white hover:bg-yellow-100' : 'bg-gray-50 text-gray-500',
@@ -92,7 +109,7 @@ export default function Calendar() {
                                 )}
                             >
                                 <p
-                                    dateTime={day.date.toString()}
+                                    // dateTime={day.date.toString()}
                                     className={
                                         day.isToday
                                             ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
@@ -117,7 +134,7 @@ export default function Calendar() {
                 </div>
             </div>
             {
-                <ChecksList checksList={checks.filter(c => c.year === selected.getFullYear() &&
+                <CheckList checksList={checks.filter(c => c.year === selected.getFullYear() &&
                     c.month === selected.getMonth() &&
                     c.day === selected.getDate())} />
             }
@@ -127,7 +144,7 @@ export default function Calendar() {
 
 
 
-function getDays(month: string | null, year: number, checks : A[]) {
+function getDays(month: string | null, year: number, checks : Check[]) {
     const today = new Date();
     const todayMonth = today.getMonth();
     const todayDay = today.getDate();

@@ -45,7 +45,7 @@ export default function Test() {
             })
         }
 
-    }, [searchParams])
+    }, [searchParams, setSearchParams])
 
     return (
         <div>
