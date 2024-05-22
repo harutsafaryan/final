@@ -4,7 +4,6 @@ import {
   Bars3Icon,
   CalendarIcon,
   ChartPieIcon,
-  Cog6ToothIcon,
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
