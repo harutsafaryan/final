@@ -92,19 +92,19 @@ export async function checkCount() {
     })
 }
 
-export async function groupCheckByDate() {
-    return await prisma.check.groupBy({
-        by: ['createdAt'],
-        _count: { month: true }
-    })
-}
+// export async function groupCheckByDate() {
+//     return await prisma.check.groupBy({
+//         by: ['createdAt'],
+//         _count: { month: true }
+//     })
+// }
 
-export async function groupChecks() {
-    return await prisma.check.groupBy({
-        by: ['date'],
-        _count: { date: true }
-    })
-}
+// export async function groupChecks() {
+//     return await prisma.check.groupBy({
+//         by: ['date'],
+//         _count: { date: true }
+//     })
+// }
 
 export async function getChecksByDateInterval(from: Date, to: Date) {
     return await prisma.check.findMany({

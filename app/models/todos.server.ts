@@ -1,4 +1,4 @@
-import type {  Todo } from "@prisma/client";
+import type {  Article, Reference, Todo } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
@@ -14,7 +14,9 @@ export async function deleteTodo(id: Todo['id']) {
     return await prisma.todo.delete({ where: { id } })
 }
 
-export async function getTodoById(id: Todo['id']) {
+type A = Todo & { article: Article, reference : Reference} | null
+
+export async function getTodoById(id: Todo['id']) : Promise<A> {
     return await prisma.todo.findFirst({ 
         where: { id }, 
         include : {

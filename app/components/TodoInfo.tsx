@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-no-leaked-render */
 import type { Article, Reference, Todo } from "@prisma/client"
+import React from "react"
 
-type A = Todo & { article: Article, reference : Reference}
+type A = Todo & { article: Article, reference : Reference} | null
 
-export default function TodoInfo( todo : A) {
+const  TodoInfo : React.FC<{todo : A}> = ({todo}) => {
     return (
         <div>
             {
@@ -74,3 +75,5 @@ export default function TodoInfo( todo : A) {
         </div>
     )
 }
+
+export default TodoInfo
