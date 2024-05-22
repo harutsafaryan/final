@@ -1,7 +1,24 @@
 import { Status } from "@prisma/client"
-import type { Check } from "@prisma/client"
+import React from "react";
 
-export default function CheckInfo( check  : Check) {
+interface C {
+    value: number | null;
+    text: string | null;
+    comment: string | null;
+    status: string;
+    createdAt: string;
+    user: {
+        name: string;
+    },
+    todo: {
+        id: string
+    }
+}
+const CheckInfo : React.FC<{check : C}> = ({check}) => {
+
+    if (check === null)
+        return;
+
     const textColor = check.status === Status.CHECKED
         ? 'bg-yellow-300'
         : check.status === Status.SUCCESS
@@ -40,3 +57,5 @@ export default function CheckInfo( check  : Check) {
         </div>
     )
 }
+
+export default CheckInfo

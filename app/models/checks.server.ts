@@ -6,8 +6,8 @@ import { getMonthIndex } from "~/utility/helper";
 
 export async function getChecks() {
     return await prisma.check.findMany({
-        where : {
-            active : true
+        where: {
+            active: true
         },
         select: {
             id: true,
@@ -43,11 +43,20 @@ export async function getCheckById(id: Check['id']) {
             comment: true,
             status: true,
             createdAt: true,
-            user: { select: { name: true } },
-            todo: { select: { id: true } }
+            user: {
+                select: {
+                    name: true
+                }
+            },
+            todo: {
+                select: {
+                    id: true
+                }
+            }
         }
     })
 }
+
 
 export async function getChecksByTodoId(todoId: Todo['id']) {
     return await prisma.check.findMany({

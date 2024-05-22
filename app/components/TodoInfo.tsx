@@ -1,10 +1,31 @@
 /* eslint-disable react/jsx-no-leaked-render */
-import type { Article, Reference, Todo } from "@prisma/client"
 import React from "react"
 
-type A = Todo & { article: Article, reference : Reference} | null
 
-const  TodoInfo : React.FC<{todo : A}> = ({todo}) => {
+interface B {
+    id: string;
+    articleId : string;
+    title : string;
+    definition : string | null;
+    referenceId : string;
+    location : string | null;
+    criteria : string | null;
+    method : string | null;
+    comments: string | null;
+    record : string | null;
+    createdAt: string;
+    article : {
+        name: string;
+    }
+    reference : {
+        name : string;
+    }
+}
+
+const  TodoInfo : React.FC<{todo : B | null }> = ({todo}) => {
+    if (todo === null)
+        return;
+    
     return (
         <div>
             {

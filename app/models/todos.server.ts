@@ -19,10 +19,28 @@ type A = Todo & { article: Article, reference : Reference} | null
 export async function getTodoById(id: Todo['id']) : Promise<A> {
     return await prisma.todo.findFirst({ 
         where: { id }, 
-        include : {
-            article : true,
-            period : true,
-            reference : true
+        select : {
+            id: true,
+            articleId : true,
+            title : true,
+            definition : true,
+            referenceId : true,
+            location : true,
+            criteria : true,
+            method : true,
+            comments: true,
+            record : true,
+            createdAt: true,
+            article : {
+                select : {
+                    name : true,
+                }
+            },
+            reference : {
+                select : {
+                    name : true,
+                }
+            }
         }
     })
 }
