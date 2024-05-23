@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { getMethods } from "~/models/method.server";
+
 import { getReferences } from "~/models/reference.server";
 import { createTodo } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
@@ -12,15 +12,29 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     // const inputs = Object.fromEntries(formData);
 
-    const referenceId = Number(formData.get('referenceId'));
-    const methodId = Number(formData.get('methodId'));
-    const title = formData.get('title');
-    const definition = formData.get('definition');
-    const location = formData.get('location');
-    const criteria = formData.get('criteria');
-    const comments = formData.get('comments');
+    const referenceId = formData.get('referenceId') as string;
+    const method = formData.get('method') as string;
+    const title = formData.get('title') as string;
+    const definition = formData.get('definition') as string;
+    const location = formData.get('location') as string;
+    const criteria = formData.get('criteria') as string;
+    const comments = formData.get('comments') as string;
 
-    const errors = {};
+interface Errors {
+    title : string | null,
+    definition : string |  null,
+    location : string | null,
+    criteria : string | null,
+    comments : string | null
+}
+
+    const errors : Errors = {
+        title : null,
+        definition : null,
+        location : null,
+        criteria : null,
+        comments : null
+    };
 
     if (typeof title !== "string" || title.length === 0)
         errors.title = "Title is required";
@@ -33,32 +47,31 @@ export async function action({ request }: ActionFunctionArgs) {
 
 
     if (typeof criteria !== "string" || criteria.length === 0)
-        errors.location = "Criteria is required";
+        errors.criteria = "Criteria is required";
 
     if (typeof comments !== "string" || comments.length === 0)
         errors.comments = "Comments is required";
 
-    for (let key in errors) {
+    for (const key in errors) {
         return json(
             { errors },
             { status: 400 },
         );
     }
 
-    await createTodo({ title, definition, location, criteria, comments, methodId, referenceId, userId })
+    await createTodo({ title, definition, location, criteria, comments, method, referenceId, userId })
     return redirect('/todos');
 }
 
 export async function loader() {
     const references = await getReferences();
-    const methods = await getMethods();
-    return json({ references, methods });
+    return json({ references });
 }
 
 
 export default function NewTodoPage() {
     const actionData = useActionData<typeof action>();
-    const { references, methods } = useLoaderData<typeof loader>();
+    const { references } = useLoaderData<typeof loader>();
 
     const titleRef = useRef<HTMLInputElement>(null);
     const definitionRef = useRef<HTMLInputElement>(null);
@@ -130,22 +143,6 @@ export default function NewTodoPage() {
                         </div>
 
                         <div className="sm:col-span-3">
-                            <label htmlFor="method" className="block text-sm font-medium leading-6 text-gray-900">
-                                Method
-                            </label>
-                            <div className="mt-2">
-                                <select
-                                    id="method"
-                                    name="methodId"
-                                    autoComplete="country-name"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                                >
-                                    {methods.map(method => (<option value={method.id}>{method.name}</option>))}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="sm:col-span-3">
                             <label htmlFor="reference" className="block text-sm font-medium leading-6 text-gray-900">
                                 Method
                             </label>
@@ -156,7 +153,7 @@ export default function NewTodoPage() {
                                     autoComplete="country-name"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                 >
-                                    {references.map(reference => (<option value={reference.id}>{reference.name}</option>))}
+                                    {references.map(reference => (<option key={reference.id} value={reference.id}>{reference.name}</option>))}
                                 </select>
                             </div>
                         </div>
@@ -225,7 +222,7 @@ export default function NewTodoPage() {
                 <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
                     <p className="mt-1 text-sm leading-6 text-gray-600">
-                        We'll always let you know about important changes, but you pick what else you want to hear about.
+                        We will always let you know about important changes, but you pick what else you want to hear about.
                     </p>
 
                     <div className="mt-10 space-y-10">

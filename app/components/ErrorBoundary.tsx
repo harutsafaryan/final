@@ -2,16 +2,16 @@
  * Source: https://github.com/epicweb-dev/epic-stack
  * Code adapted and modified for this template.
  */
+import { isRouteErrorResponse, useParams, useRouteError } from '@remix-run/react'
 import type { ErrorResponse } from '@remix-run/router'
 
-import { isRouteErrorResponse, useParams, useRouteError } from '@remix-run/react'
 
 type StatusHandler = (info: {
   error: ErrorResponse
   params: Record<string, string | undefined>
 }) => JSX.Element | null
 
-type GenericErrorBoundaryProps = {
+interface GenericErrorBoundaryProps {
   defaultStatusHandler?: StatusHandler
   statusHandlers?: Record<number, StatusHandler>
   unexpectedErrorHandler?: (error: unknown) => JSX.Element | null

@@ -47,7 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (password.length < 8) {
     return json(
-      { errors: { email: null, password: "Password is too short" } },
+      { errors: { email: null, name: null, password: "Password is too short" } },
       { status: 400 },
     );
   }
@@ -89,9 +89,11 @@ export default function Join() {
   useEffect(() => {
     if (actionData?.errors?.email) {
       emailRef.current?.focus();
-    } else if (actionData?.errors?.password) {
+    }
+    if (actionData?.errors?.password) {
       passwordRef.current?.focus();
-    } else if (actionData?.errors?.name) {
+    }
+    if (actionData?.errors?.name) {
       nameRef.current?.focus();
     }
   }, [actionData]);

@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { getMethods } from "~/models/method.server";
+
 import { getReferences } from "~/models/reference.server";
 import { createTodo } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
@@ -10,17 +10,29 @@ export async function action({ request }: ActionFunctionArgs) {
     const userId = await requireUserId(request);
 
     const formData = await request.formData();
-    // const inputs = Object.fromEntries(formData);
+    const referenceId = formData.get('referenceId') as string;
+    const method = formData.get('method') as string;
+    const title = formData.get('title') as string;
+    const definition = formData.get('definition') as string;
+    const location = formData.get('location') as string;
+    const criteria = formData.get('criteria') as string;
+    const comments = formData.get('comments') as string;
 
-    const referenceId = formData.get('referenceId');
-    const methodId = formData.get('methodId');
-    const title = formData.get('title');
-    const definition = formData.get('definition');
-    const location = formData.get('location');
-    const criteria = formData.get('criteria');
-    const comments = formData.get('comments');
+    interface Errors {
+        title: string | null,
+        definition: string | null,
+        criteria: string | null,
+        location: string | null,
+        comments: string | null
+    }
 
-    const errors = {};
+    const errors: Errors = {
+        title: null,
+        definition: null,
+        criteria: null,
+        location: null,
+        comments: null
+    }
 
     if (typeof title !== "string" || title.length === 0)
         errors.title = "Title is required";
@@ -33,32 +45,31 @@ export async function action({ request }: ActionFunctionArgs) {
 
 
     if (typeof criteria !== "string" || criteria.length === 0)
-        errors.location = "Criteria is required";
+        errors.criteria = "Criteria is required";
 
     if (typeof comments !== "string" || comments.length === 0)
         errors.comments = "Comments is required";
 
-    for (let key in errors) {
+    for (const key in errors) {
         return json(
             { errors },
             { status: 400 },
         );
     }
 
-    await createTodo({ title, definition, location, criteria, comments, methodId, referenceId, userId })
+    await createTodo({ title, definition, location, criteria, comments, method, referenceId, userId })
     return redirect('/todos');
 }
 
 export async function loader() {
     const references = await getReferences();
-    const methods = await getMethods();
-    return json({ references, methods });
+    return json({ references });
 }
 
 
 export default function NewTodoPage() {
     const actionData = useActionData<typeof action>();
-    const { references, methods } = useLoaderData<typeof loader>();
+    const { references } = useLoaderData<typeof loader>();
 
     const titleRef = useRef<HTMLInputElement>(null);
     const definitionRef = useRef<HTMLInputElement>(null);
@@ -88,7 +99,7 @@ export default function NewTodoPage() {
                         <select name="referenceId"
                             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
                         >
-                            {references.map(reference => (<option value={reference.id}>{reference.name}</option>))}
+                            {references.map(reference => (<option key={reference.id} value={reference.id}>{reference.name}</option>))}
                         </select>
                     </label>
                     {/* title */}
@@ -125,15 +136,6 @@ export default function NewTodoPage() {
                             {actionData.errors.definition}
                         </div>
                     ) : null}
-                    {/* method */}
-                    <label className="flex w-full flex-col gap-1">
-                        <span>Method:</span>
-                        <select name="methodId"
-                            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
-                        >
-                            {methods.map(method => (<option value={method.id}>{method.name}</option>))}
-                        </select>
-                    </label>
                     {/* location */}
                     <label className="flex w-full flex-col gap-1">
                         <span>Location:</span>

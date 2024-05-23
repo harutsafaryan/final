@@ -1,4 +1,5 @@
-import type { User, Todo } from "@prisma/client";
+import type { Todo } from "@prisma/client";
+
 import { prisma } from "~/db.server";
 
 export async function getTodos() {
@@ -13,13 +14,31 @@ export async function deleteTodo(id: Todo['id']) {
     return await prisma.todo.delete({ where: { id } })
 }
 
-export async function getTodoById(id: Todo['id']) {
+export async function getTodoById(id: Todo['id'])  {
     return await prisma.todo.findFirst({ 
         where: { id }, 
-        include : {
-            article : true,
-            period : true,
-            reference : true
+        select : {
+            id: true,
+            articleId : true,
+            title : true,
+            definition : true,
+            referenceId : true,
+            location : true,
+            criteria : true,
+            method : true,
+            comments: true,
+            record : true,
+            createdAt: true,
+            article : {
+                select : {
+                    name : true,
+                }
+            },
+            reference : {
+                select : {
+                    name : true,
+                }
+            }
         }
     })
 }
@@ -30,20 +49,24 @@ export async function createTodo({
     location,
     criteria,
     comments,
-    methodId,
+    method,
     referenceId,
     userId
-}: Pick<Todo, 'title' | 'definition' | 'location' | 'criteria' | 'comments' | 'methodId' | 'referenceId' | 'userId'>) {
+}: Pick<Todo, 'title' | 'definition' | 'location' | 'criteria' | 'comments' | 'method' | 'referenceId' | 'userId'>) {
     return await prisma.todo.create({
         data: {
+            remark : '',
             title,
             definition,
+            method,
             location,
             criteria,
+            record : '',
             comments,
-            methodId,
             referenceId,
-            userId
+            userId,
+            articleId: '',
+            periodId: ''
         }
     })
 }

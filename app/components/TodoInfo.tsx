@@ -1,4 +1,31 @@
-export default function TodoInfo({ todo }) {
+/* eslint-disable react/jsx-no-leaked-render */
+import React from "react"
+
+
+interface B {
+    id: string;
+    articleId : string;
+    title : string;
+    definition : string | null;
+    referenceId : string;
+    location : string | null;
+    criteria : string | null;
+    method : string | null;
+    comments: string | null;
+    record : string | null;
+    createdAt: string;
+    article : {
+        name: string;
+    }
+    reference : {
+        name : string;
+    }
+}
+
+const  TodoInfo : React.FC<{todo : B | null }> = ({todo}) => {
+    if (todo === null)
+        return;
+    
     return (
         <div>
             {
@@ -69,3 +96,5 @@ export default function TodoInfo({ todo }) {
         </div>
     )
 }
+
+export default TodoInfo

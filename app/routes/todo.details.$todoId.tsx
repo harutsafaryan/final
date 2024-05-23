@@ -1,16 +1,20 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, Link, Outlet, useLoaderData, useLocation, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
-import { useRef, useState } from "react";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { Status } from "@prisma/client";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { Form, Outlet, useLoaderData, useLocation, useNavigate } from "@remix-run/react";
+import { useRef } from "react";
+import { redirectWithToast } from "remix-toast";
 import invariant from "tiny-invariant";
+
+import TodoInfo from "~/components/TodoInfo";
 import { createCheck } from "~/models/checks.server";
 import { getTodoById } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
-import { Prisma, Status } from "@prisma/client";
-import TodoInfo from "~/components/TodoInfo";
-import { redirectWithSuccess, redirectWithToast } from "remix-toast";
+
 
 const statuses = Object.keys(Status);
 type StatusKeys = keyof typeof Status;
+
 
 export async function loader({ params }: LoaderFunctionArgs) {
     invariant(params.todoId, "todoId not found");
@@ -33,14 +37,12 @@ export async function action({ request }: ActionFunctionArgs) {
     const comment = commentValue !== '' ? commentValue : null;
 
     const userId = await requireUserId(request);
-    const check = await createCheck({ status, value, text, comment, todoId, userId });
+    await createCheck({ status, value, text, comment, todoId, userId });
     return redirectWithToast('/todos', {message: 'You succesfully create check', type : 'info'});
 }
 
 export default function TodoPage() {
     const { todo } = useLoaderData<typeof loader>();
-    const [value, setValue] = useState("");
-    const [showHistory, setShowHistory] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 

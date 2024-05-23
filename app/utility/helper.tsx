@@ -30,10 +30,10 @@ export function getMonthName(month: number) {
         case 9: return 'October'
         case 10: return 'November'
         case 11: return 'December'
-        default: return null
+        default: return ''
     }
 }
 
-export function classNames(...classes: Array<String>) {
+export function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }

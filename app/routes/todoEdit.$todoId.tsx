@@ -1,15 +1,15 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+
 import { getTodoById } from "~/models/todos.server";
 
 export async function loader({params} : LoaderFunctionArgs) {
-    const todoId = Number(params.todoId);
+    const todoId = params.todoId as string;
     const todo = await getTodoById(todoId);
     return json({todo});
 }
 
 export default function EditTodo() {
-    const {todo} = useLoaderData<typeof loader>();
+    // const {todo} = useLoaderData<typeof loader>();
     return (
         <form>
           <div className="space-y-12">
@@ -227,7 +227,7 @@ export default function EditTodo() {
             <div className="border-b border-gray-900/10 pb-12">
               <h2 className="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
               <p className="mt-1 text-sm leading-6 text-gray-600">
-                We'll always let you know about important changes, but you pick what else you want to hear about.
+                We will always let you know about important changes, but you pick what else you want to hear about.
               </p>
     
               <div className="mt-10 space-y-10">

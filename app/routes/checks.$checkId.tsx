@@ -1,30 +1,31 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
+import { redirectWithToast } from "remix-toast";
 import invariant from "tiny-invariant";
+
 import CheckInfo from "~/components/CheckInfo";
 import TodoInfo from "~/components/TodoInfo";
 import { deleteCheck, getCheckById } from "~/models/checks.server";
 import { getTodoById } from "~/models/todos.server";
 import { requireUserId } from "~/session.server";
-import { redirectWithSuccess, redirectWithToast } from "remix-toast";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-    const userId = await requireUserId(request);
+    await requireUserId(request);
     invariant(params.checkId, "checkId not found");
 
     const checkId = params.checkId
     const check = await getCheckById(checkId);
-    const todo = await getTodoById(check?.todo.id)
 
     if (!check) {
         throw new Response("Not Found", { status: 404 });
     }
+    const todo = await getTodoById(check.todo.id)
 
     return json({ check, todo });
 }
 
-export async function action({params, request}: ActionFunctionArgs) {
-    const userId = await requireUserId(request);
+export async function action({ params, request }: ActionFunctionArgs) {
+    await requireUserId(request);
 
     const checkId = params.checkId;
     invariant(checkId, 'check id is rquired')

@@ -1,12 +1,13 @@
-import { type User, type Check, type Todo, Prisma, } from "@prisma/client";
-import { title } from "process";
+
+import type { Check, Todo } from "@prisma/client";
+
 import { prisma } from "~/db.server";
 import { getMonthIndex } from "~/utility/helper";
 
 export async function getChecks() {
     return await prisma.check.findMany({
-        where : {
-            active : true
+        where: {
+            active: true
         },
         select: {
             id: true,
@@ -42,11 +43,20 @@ export async function getCheckById(id: Check['id']) {
             comment: true,
             status: true,
             createdAt: true,
-            user: { select: { name: true } },
-            todo: { select: { id: true } }
+            user: {
+                select: {
+                    name: true
+                }
+            },
+            todo: {
+                select: {
+                    id: true
+                }
+            }
         }
     })
 }
+
 
 export async function getChecksByTodoId(todoId: Todo['id']) {
     return await prisma.check.findMany({
@@ -64,7 +74,6 @@ export async function getChecksByTodoId(todoId: Todo['id']) {
 //status, value, text, comment, record, todoId, userId
 
 export async function createCheck({ status, value, text, comment, todoId, userId }: Pick<Check, 'status' | 'value' | 'text' | 'comment' | 'todoId' | 'userId'>) {
-    const now = new Date();
 
     return await prisma.check.create({
         data: {
@@ -74,17 +83,6 @@ export async function createCheck({ status, value, text, comment, todoId, userId
             comment,
             todoId,
             userId
-        }
-    })
-}
-
-export async function generateChecks() {
-    const random = Math.random() * 10000;
-    const text = random.toString();
-    await prisma.check.create({
-        data: {
-            todoId: 1,
-            userId: 1
         }
     })
 }
@@ -103,19 +101,19 @@ export async function checkCount() {
     })
 }
 
-export async function groupCheckByDate() {
-    return await prisma.check.groupBy({
-        by: ['createdAt'],
-        _count: { month: true }
-    })
-}
+// export async function groupCheckByDate() {
+//     return await prisma.check.groupBy({
+//         by: ['createdAt'],
+//         _count: { month: true }
+//     })
+// }
 
-export async function groupChecks(date: Date) {
-    return await prisma.check.groupBy({
-        by: ['date'],
-        _count: { date: true }
-    })
-}
+// export async function groupChecks() {
+//     return await prisma.check.groupBy({
+//         by: ['date'],
+//         _count: { date: true }
+//     })
+// }
 
 export async function getChecksByDateInterval(from: Date, to: Date) {
     return await prisma.check.findMany({
@@ -142,7 +140,6 @@ export async function getChecksByMonth(month: string) {
         },
         select: {
             id: true,
-            record: true,
             createdAt: true,
             user: true,
             year: true,

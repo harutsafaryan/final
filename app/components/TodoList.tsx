@@ -1,4 +1,8 @@
-export default function TodoList({todos}) {
+import { Reference, Todo } from "@prisma/client"
+
+type A = Todo & {reference : Reference}
+
+export default function TodoList(todos : A[]) {
     return (
         <p>
         todos count is: {todos.length}
@@ -19,13 +23,13 @@ export default function TodoList({todos}) {
                 </tr>
             </thead>
             <tbody>
-                {todos.map(todo => (
+                {todos.map((todo : A) => (
                     <tr key={todo.id}>
                         <td className="border border-slate-700 px-3">{todo.id}</td>
                         <td className="border border-slate-700 px-3">{todo.reference.name}</td>
                         <td className="border border-slate-700 px-3">{todo.title}</td>
                         <td className="border border-slate-700 ps-3">{todo.definition}</td>
-                        <td className="border border-slate-700 ps-3">{todo.method.name}</td>
+                        <td className="border border-slate-700 ps-3">{todo.method}</td>
                         <td className="border border-slate-700 ps-3">{todo.location}</td>
                         <td className="border border-slate-700 ps-3">{todo.criteria}</td>
                         <td className="border border-slate-700 ps-3">{todo.comments}</td>
