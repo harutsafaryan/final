@@ -27,6 +27,7 @@ interface Check {
     }
 }
 
+
 export async function loader({ request }: LoaderFunctionArgs) {
 
     const url = new URL(request.url);
@@ -43,7 +44,9 @@ export default function Calendar() {
 
     const month = searchParams.get('month');
     const year = searchParams.get('year');
-    const days = getDays(month, Number(year), checks);
+
+    const c = checks as unknown as Check[];
+    const days = getDays(month, Number(year), c);
 
     useEffect(() => {
         const month = searchParams.get('month');
@@ -134,7 +137,7 @@ export default function Calendar() {
                 </div>
             </div>
             {
-                <CheckList checksList={checks.filter(c => c.year === selected.getFullYear() &&
+                <CheckList checksList={c.filter(c => c.year === selected.getFullYear() &&
                     c.month === selected.getMonth() &&
                     c.day === selected.getDate())} />
             }
