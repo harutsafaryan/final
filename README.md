@@ -214,12 +214,12 @@ We use [Prettier](https://prettier.io/) for auto-formatting in this project. It'
 ### server details
 Postgres cluster final-f55f-db created
   Username:    postgres
-  Password:    09VrCtJ7nKftfYe
+  Password:    JX6IZRv7plnhsI5
   Hostname:    final-f55f-db.internal
-  Flycast:     fdaa:9:14c0:0:1::11
+  Flycast:     fdaa:9:14c0:0:1::13
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:09VrCtJ7nKftfYe@final-f55f-db.flycast:5432
+  Connection string: postgres://postgres:JX6IZRv7plnhsI5@final-f55f-db.flycast:5432
 
 Save your credentials in a secure place -- you won't be able to see them again!
 
@@ -234,16 +234,17 @@ Creating user
 
 Postgres cluster final-f55f-db is now attached to final-f55f
 The following secret was added to final-f55f:
-  DATABASE_URL=postgres://final_f55f:ESo3MRWPc98nAew@final-f55f-db.flycast:5432/final_f55f?sslmode=disable
+  DATABASE_URL=postgres://final_f55f:snKSN0VWy95bng4@final-f55f-db.flycast:5432/final_f55f?sslmode=disable
+automatically selected personal organization: harsaf
 
-  Postgres cluster final-f55f-staging-db created
+Postgres cluster final-f55f-staging-db created
   Username:    postgres
-  Password:    4Opn83LBUMDQR6A
+  Password:    RiGQ7ywMcJwFQf3
   Hostname:    final-f55f-staging-db.internal
-  Flycast:     fdaa:9:14c0:0:1::12
+  Flycast:     fdaa:9:14c0:0:1::14
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:4Opn83LBUMDQR6A@final-f55f-staging-db.flycast:5432
+  Connection string: postgres://postgres:RiGQ7ywMcJwFQf3@final-f55f-staging-db.flycast:5432
 
 Save your credentials in a secure place -- you won't be able to see them again!
 
@@ -258,6 +259,8 @@ Creating user
 
 Postgres cluster final-f55f-staging-db is now attached to final-f55f-staging
 The following secret was added to final-f55f-staging:
-  DATABASE_URL=postgres://final_f55f_staging:7lzwdLAauwRu1O1@final-f55f-staging-db.flycast:5432/final_f55f_staging?sslmode=disable
+  DATABASE_URL=postgres://final_f55f_staging:qP7zcNXnZQSYdma@final-f55f-staging-db.flycast:5432/final_f55f_staging?sslmode=disable
+PS C:\Users\user\Desktop\react-proj\glass-control\final>
+
 
   npx prisma db push
